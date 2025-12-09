@@ -60,15 +60,34 @@ https://git-scm.com/
    mvn spring-boot:run
    ```
 
-## API Endpoint Details
+## API Endpoint Details. GameController
 
-### Hello world
+### getAllGamesFromDb
 
-- Description: Returns a simple "Hello World!" message.
-- URL: `http://localhost:8080/api/hello`
+- Description: Returns a page of games from DB.
+- URL: `http://localhost:8080/api/games/local`
 - Method: GET
-- Response:
 
-```json
-"Hello World!"
-```
+### getFromDbById
+
+- Description: Returns a game from DB by its ID.
+- URL: `http://localhost:8080/api/games/local/id/{id}`
+- Method: GET
+
+### getFromDbByGenre
+
+- Description: Returns a page of games from DB genre.
+- URL: `http://localhost:8080/api/games/local/genre/{genre}`
+- Method: GET
+
+### getFromDbByYear
+
+- Description: Returns a page of games from DB by year.
+- URL: `http://localhost:8080/api/games/local/year/{year}`
+- Method: GET
+
+### getFromDbByPlatform
+
+- Description: Returns a page of games from DB by platform.
+- URL: `http://localhost:8080/api/games/local/platform/{platform}`
+- Method: GET
