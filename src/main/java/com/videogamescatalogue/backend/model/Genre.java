@@ -1,0 +1,62 @@
+package com.videogamescatalogue.backend.model;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+
+@Entity
+@Table(name = "genres")
+@SQLDelete(sql = "UPDATE genres SET is_deleted = true WHERE id = ?")
+@SQLRestriction(value = "is_deleted = false")
+@Getter
+@Setter
+public class Genre {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true)
+    @Enumerated(EnumType.STRING)
+    private Name name;
+
+    @Column(nullable = false, name = "is_deleted")
+    private boolean isDeleted = false;
+
+    public enum Name {
+        ACTION("Action"),
+        INDIE("Indie"),
+        ADVENTURE("Adventure"),
+        RPG("RPG"),
+        STRATEGY("Strategy"),
+        SHOOTER("Shooter"),
+        CASUAL("Casual"),
+        SIMULATION("Simulation"),
+        PUZZLE("Puzzle"),
+        ARCADE("Arcade"),
+        PLATFORMER("Platformer"),
+        MASS_MULTIPLAYER("Massively Multiplayer"),
+        RACING("Racing"),
+        SPORTS("Sports"),
+        FIGHTING("Fighting"),
+        FAMILY("Family"),
+        BOARD("Board Games"),
+        CARD("Card"),
+        EDUCATIONAL("Educational"),
+        UNKNOWN("Unknown");
+
+        private final String value;
+
+        Name(String value) {
+            this.value = value;
+        }
+    }
+}

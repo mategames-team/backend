@@ -1,0 +1,38 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-games-genres-table
+      author: Yuliia
+      changes:
+        - createTable:
+            tableName: games_genres
+            columns:
+              - column:
+                  name: game_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: genre_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - addPrimaryKey:
+                  tableName: games_genres
+                  columnNames: game_id, genre_id
+                  constraintName: pk_games_genres
+
+              - addForeignKeyConstraint:
+                  baseTableName: games_genres
+                  baseColumnNames: game_id
+                  referencedTableName: game
+                  referencedColumnNames: id
+                  constraintName: fk_games_genres_game
+
+              - addForeignKeyConstraint:
+                  baseTableName: games_genres
+                  baseColumnNames: genre_id
+                  referencedTableName: genres
+                  referencedColumnNames: id
+                  constraintName: fk_games_genres_genre
