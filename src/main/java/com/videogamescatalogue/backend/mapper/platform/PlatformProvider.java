@@ -1,8 +1,8 @@
-package com.videogamescatalogue.backend.mapper;
+package com.videogamescatalogue.backend.mapper.platform;
 
 import com.videogamescatalogue.backend.dto.external.ApiPlatformWrapper;
 import com.videogamescatalogue.backend.dto.external.ApiResponsePlatformDto;
-import com.videogamescatalogue.backend.dto.internal.PlatformDto;
+import com.videogamescatalogue.backend.dto.internal.platform.PlatformDto;
 import com.videogamescatalogue.backend.model.Platform;
 import com.videogamescatalogue.backend.repository.PlatformRepository;
 import jakarta.annotation.PostConstruct;

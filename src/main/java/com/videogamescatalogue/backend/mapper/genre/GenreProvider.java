@@ -1,4 +1,4 @@
-package com.videogamescatalogue.backend.mapper;
+package com.videogamescatalogue.backend.mapper.genre;
 
 import com.videogamescatalogue.backend.dto.external.ApiResponseGenreDto;
 import com.videogamescatalogue.backend.model.Genre;

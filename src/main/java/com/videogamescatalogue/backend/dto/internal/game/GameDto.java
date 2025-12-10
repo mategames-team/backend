@@ -1,5 +1,7 @@
-package com.videogamescatalogue.backend.dto.internal;
+package com.videogamescatalogue.backend.dto.internal.game;
 
+import com.videogamescatalogue.backend.dto.internal.genre.GenreDto;
+import com.videogamescatalogue.backend.dto.internal.platform.PlatformDto;
 import java.math.BigDecimal;
 import java.util.Set;
 
