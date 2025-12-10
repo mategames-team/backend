@@ -1,4 +1,4 @@
-package com.videogamescatalogue.backend.service;
+package com.videogamescatalogue.backend.service.game;
 
 import com.videogamescatalogue.backend.dto.internal.GameDto;
 import com.videogamescatalogue.backend.dto.internal.GameSearchParameters;

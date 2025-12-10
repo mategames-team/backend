@@ -1,4 +1,4 @@
-package com.videogamescatalogue.backend.service;
+package com.videogamescatalogue.backend.service.game;
 
 import com.videogamescatalogue.backend.dto.external.ApiResponseGameDto;
 import com.videogamescatalogue.backend.dto.internal.GameDto;
@@ -8,6 +8,7 @@ import com.videogamescatalogue.backend.mapper.GameMapper;
 import com.videogamescatalogue.backend.model.Game;
 import com.videogamescatalogue.backend.repository.GameRepository;
 import com.videogamescatalogue.backend.repository.SpecificationBuilder;
+import com.videogamescatalogue.backend.service.RawgApiClient;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
