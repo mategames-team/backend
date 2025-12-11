@@ -1,0 +1,38 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-games-platforms-table
+      author: Yuliia
+      changes:
+        - createTable:
+            tableName: games_platforms
+            columns:
+              - column:
+                  name: game_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: platform_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - addPrimaryKey:
+                  tableName: games_platforms
+                  columnNames: game_id, platform_id
+                  constraintName: pk_games_platforms
+
+              - addForeignKeyConstraint:
+                  baseTableName: games_platforms
+                  baseColumnNames: game_id
+                  referencedTableName: game
+                  referencedColumnNames: id
+                  constraintName: fk_games_platforms_game
+
+              - addForeignKeyConstraint:
+                  baseTableName: games_platforms
+                  baseColumnNames: platform_id
+                  referencedTableName: platform
+                  referencedColumnNames: id
+                  constraintName: fk_games_platforms_platform

@@ -1,0 +1,81 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-default-platforms
+      author: Yuliia
+      changes:
+        - insert:
+            tableName: platforms
+            columns:
+              - column:
+                  name: general_name
+                  value: "PC"
+
+        - insert:
+            tableName: platforms
+            columns:
+              - column:
+                  name: general_name
+                  value: "PLAYSTATION"
+
+        - insert:
+            tableName: platforms
+            columns:
+              - column:
+                  name: general_name
+                  value: "XBOX"
+
+        - insert:
+            tableName: platforms
+            columns:
+              - column:
+                  name: general_name
+                  value: "NINTENDO_SWITCH"
+
+        - insert:
+            tableName: platforms
+            columns:
+              - column:
+                  name: general_name
+                  value: "MOBILE"
+
+        - insert:
+            tableName: platforms
+            columns:
+              - column:
+                  name: general_name
+                  value: "MAC"
+
+        - insert:
+            tableName: platforms
+            columns:
+              - column:
+                  name: general_name
+                  value: "LINUX"
+
+        - insert:
+            tableName: platforms
+            columns:
+              - column:
+                  name: general_name
+                  value: "SEGA"
+
+        - insert:
+            tableName: platforms
+            columns:
+              - column:
+                  name: general_name
+                  value: "ATARI"
+
+        - insert:
+            tableName: platforms
+            columns:
+              - column:
+                  name: general_name
+                  value: "CLASSIC_CONSOLE"
+
+        - insert:
+            tableName: platforms
+            columns:
+              - column:
+                  name: general_name
+                  value: "UNKNOWN"

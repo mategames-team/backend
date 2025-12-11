@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - include:
+      file: classpath:/db/changelog/changes/01-create-platforms-table.yaml
+  - include:
+      file: classpath:/db/changelog/changes/02-insert-default-platforms.yaml
+  - include:
+      file: classpath:/db/changelog/changes/03-create-genres-table.yaml
+  - include:
+      file: classpath:/db/changelog/changes/04-insert-default-genres.yaml
+  - include:
+      file: classpath:/db/changelog/changes/05-create-games-table.yaml
+  - include:
+      file: classpath:/db/changelog/changes/06-create-games-platforms-table.yaml
+  - include:
+      file: classpath:/db/changelog/changes/07-create-games-genres-table.yaml
