@@ -42,31 +42,12 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public GameDto getFromDbById(Long id) {
-        Optional<Game> gameOptional = gameRepository.findById(id);
+    public GameDto getFromDbByApiId(Long apiId) {
+        Optional<Game> gameOptional = gameRepository.findByApiId(apiId);
         if (gameOptional.isEmpty()) {
-            throw new EntityNotFoundException("There is no game in DB by id:" + id);
+            throw new EntityNotFoundException("There is no game in DB by api id:" + apiId);
         }
-
         return gameMapper.toDto(gameOptional.get());
-    }
-
-    @Override
-    public Page<GameDto> getFromDbByGenre(Genre.Name genre, Pageable pageable) {
-        return gameRepository.findByGenresName(genre, pageable)
-                .map(gameMapper::toDto);
-    }
-
-    @Override
-    public Page<GameDto> getByYear(int year, Pageable pageable) {
-        return gameRepository.findByYear(year, pageable)
-                .map(gameMapper::toDto);
-    }
-
-    @Override
-    public Page<GameDto> getFromDbByPlatform(Platform.GeneralName platform, Pageable pageable) {
-        return gameRepository.findByPlatformsGeneralName(platform, pageable)
-                .map(gameMapper::toDto);
     }
 
     @Override

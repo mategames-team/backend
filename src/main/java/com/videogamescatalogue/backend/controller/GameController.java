@@ -5,7 +5,6 @@ import com.videogamescatalogue.backend.dto.internal.GameSearchParameters;
 import com.videogamescatalogue.backend.model.Genre;
 import com.videogamescatalogue.backend.model.Platform;
 import com.videogamescatalogue.backend.service.GameService;
-import jakarta.validation.Valid;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,56 +35,8 @@ public class GameController {
     }
 
     @GetMapping("/local/id/{id}")
-    public GameDto getFromDbById(@PathVariable Long id) {
-        return gameService.getFromDbById(id);
-    }
-
-    @GetMapping("/local/genre/{genre}")
-    public ResponseEntity<?> getFromDbByGenre(
-            @PathVariable String genre,
-            @PageableDefault(size = DEFAULT_PAGE_SIZE)
-            Pageable pageable
-    ) {
-        Genre.Name name;
-        try {
-            name = Genre.Name.valueOf(genre.toUpperCase());
-        } catch (IllegalArgumentException ex) {
-            return ResponseEntity
-                    .badRequest()
-                    .body("There is no genre by name: " + genre
-                            + ". Allowed values: " + Arrays.asList(Genre.Name.values())
-                    );
-        }
-        return ResponseEntity.ok(gameService.getFromDbByGenre(name, pageable));
-    }
-
-    @GetMapping("/local/year/{year}")
-    public Page<GameDto> getFromDbByYear(
-            @PathVariable int year,
-            @PageableDefault(size = DEFAULT_PAGE_SIZE)
-            Pageable pageable
-    ) {
-        return gameService.getByYear(year, pageable);
-    }
-
-    @GetMapping("/local/platform/{platform}")
-    public ResponseEntity<?> getFromDbByPlatform(
-            @PathVariable String platform,
-            @PageableDefault(size = DEFAULT_PAGE_SIZE)
-            Pageable pageable
-    ) {
-        Platform.GeneralName name;
-        try {
-            name = Platform.GeneralName.valueOf(platform.toUpperCase());
-
-        } catch (IllegalArgumentException ex) {
-            return ResponseEntity
-                    .badRequest()
-                    .body("There is no platform by name: " + platform
-                    + ". Allowed values: " + Arrays.asList(Platform.GeneralName.values())
-                    );
-        }
-        return ResponseEntity.ok(gameService.getFromDbByPlatform(name, pageable));
+    public GameDto getFromDbByApiId(@PathVariable Long id) {
+        return gameService.getFromDbByApiId(id);
     }
 
     @GetMapping("/local/search")
