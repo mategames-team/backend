@@ -13,7 +13,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 @Component
-public class GamePlatformsSpecificationProvider implements SpecificationProvider<Game, List<String>> {
+public class GamePlatformsSpecificationProvider
+        implements SpecificationProvider<Game, List<String>> {
 
     public static final String KEY = Game.SpecificationKey.PLATFORMS.getValue();
 
@@ -37,7 +38,6 @@ public class GamePlatformsSpecificationProvider implements SpecificationProvider
                         .map(String::toUpperCase)
                         .map(Platform.GeneralName::valueOf)
                         .toList();
-
 
                 Join<Object, Object> platromJoin = root.join(KEY);
 

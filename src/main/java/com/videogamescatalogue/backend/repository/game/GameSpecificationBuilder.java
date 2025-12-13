@@ -48,7 +48,9 @@ public class GameSpecificationBuilder
             Specification<Game> specification
     ) {
         if (searchParameter != null) {
-            SpecificationProvider<Game, Object> provider = (SpecificationProvider<Game, Object>) specificationProviderManager.getSpecificationProvider(key);
+            SpecificationProvider<Game, Object> provider =
+                    (SpecificationProvider<Game, Object>) specificationProviderManager
+                            .getSpecificationProvider(key);
             return specification.and(
                     provider.getSpecification(searchParameter)
             );

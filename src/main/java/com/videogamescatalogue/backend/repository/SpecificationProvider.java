@@ -1,6 +1,5 @@
 package com.videogamescatalogue.backend.repository;
 
-import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
 
 public interface SpecificationProvider<T,P> {

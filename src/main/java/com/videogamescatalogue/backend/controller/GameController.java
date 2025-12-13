@@ -44,7 +44,7 @@ public class GameController {
             @ModelAttribute GameSearchParameters searchParameters,
             @PageableDefault(size = DEFAULT_PAGE_SIZE)
             Pageable pageable
-            ) {
+    ) {
         validateSearchParams(searchParameters);
         return gameService.search(searchParameters, pageable);
     }

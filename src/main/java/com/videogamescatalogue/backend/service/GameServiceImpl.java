@@ -6,8 +6,6 @@ import com.videogamescatalogue.backend.dto.internal.GameSearchParameters;
 import com.videogamescatalogue.backend.exception.EntityNotFoundException;
 import com.videogamescatalogue.backend.mapper.GameMapper;
 import com.videogamescatalogue.backend.model.Game;
-import com.videogamescatalogue.backend.model.Genre;
-import com.videogamescatalogue.backend.model.Platform;
 import com.videogamescatalogue.backend.repository.GameRepository;
 import com.videogamescatalogue.backend.repository.SpecificationBuilder;
 import java.util.List;
