@@ -58,6 +58,8 @@ public class Game {
 
     private BigDecimal apiRating;
 
+    private String description;
+
     @Column(nullable = false, name = "is_deleted")
     private boolean isDeleted = false;
 

@@ -36,6 +36,7 @@ public class GameController {
 
     @GetMapping("/local/id/{id}")
     public GameDto getFromDbByApiId(@PathVariable Long id) {
+
         return gameService.getFromDbByApiId(id);
     }
 
