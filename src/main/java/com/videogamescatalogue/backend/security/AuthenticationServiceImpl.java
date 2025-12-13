@@ -3,7 +3,6 @@ package com.videogamescatalogue.backend.security;
 import com.videogamescatalogue.backend.dto.internal.user.UserLoginRequestDto;
 import com.videogamescatalogue.backend.dto.internal.user.UserLoginResponseDto;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
