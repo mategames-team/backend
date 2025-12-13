@@ -1,10 +1,12 @@
-package com.videogamescatalogue.backend.mapper;
+package com.videogamescatalogue.backend.mapper.game;
 
 import com.videogamescatalogue.backend.config.MapperConfig;
 import com.videogamescatalogue.backend.dto.external.ApiResponseGameDto;
-import com.videogamescatalogue.backend.dto.internal.GameDto;
+import com.videogamescatalogue.backend.dto.internal.game.GameDto;
 import com.videogamescatalogue.backend.exception.ApiException;
 import com.videogamescatalogue.backend.exception.ParsingException;
+import com.videogamescatalogue.backend.mapper.genre.GenreProvider;
+import com.videogamescatalogue.backend.mapper.platform.PlatformProvider;
 import com.videogamescatalogue.backend.model.Game;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;

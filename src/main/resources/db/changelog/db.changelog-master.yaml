@@ -13,3 +13,5 @@ databaseChangeLog:
       file: classpath:/db/changelog/changes/06-create-games-platforms-table.yaml
   - include:
       file: classpath:/db/changelog/changes/07-create-games-genres-table.yaml
+  - include:
+      file: classpath:/db/changelog/changes/08-create-users-table.yaml

@@ -1,7 +1,7 @@
-package com.videogamescatalogue.backend.mapper;
+package com.videogamescatalogue.backend.mapper.platform;
 
 import com.videogamescatalogue.backend.config.MapperConfig;
-import com.videogamescatalogue.backend.dto.internal.PlatformDto;
+import com.videogamescatalogue.backend.dto.internal.platform.PlatformDto;
 import com.videogamescatalogue.backend.model.Platform;
 import java.util.Set;
 import org.mapstruct.Mapper;

@@ -1,6 +1,6 @@
 package com.videogamescatalogue.backend;
 
-import com.videogamescatalogue.backend.service.GameService;
+import com.videogamescatalogue.backend.service.game.GameService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

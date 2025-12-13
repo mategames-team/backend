@@ -1,7 +1,7 @@
-package com.videogamescatalogue.backend.service;
+package com.videogamescatalogue.backend.service.game;
 
-import com.videogamescatalogue.backend.dto.internal.GameDto;
 import com.videogamescatalogue.backend.dto.internal.GameSearchParameters;
+import com.videogamescatalogue.backend.dto.internal.game.GameDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

@@ -1,10 +1,10 @@
 package com.videogamescatalogue.backend.controller;
 
-import com.videogamescatalogue.backend.dto.internal.GameDto;
 import com.videogamescatalogue.backend.dto.internal.GameSearchParameters;
+import com.videogamescatalogue.backend.dto.internal.game.GameDto;
 import com.videogamescatalogue.backend.model.Genre;
 import com.videogamescatalogue.backend.model.Platform;
-import com.videogamescatalogue.backend.service.GameService;
+import com.videogamescatalogue.backend.service.game.GameService;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
