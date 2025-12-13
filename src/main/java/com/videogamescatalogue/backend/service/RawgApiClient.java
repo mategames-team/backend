@@ -2,6 +2,7 @@ package com.videogamescatalogue.backend.service;
 
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.videogamescatalogue.backend.dto.external.ApiResponseFullGameDto;
 import com.videogamescatalogue.backend.dto.external.ApiResponseGameDto;
 import com.videogamescatalogue.backend.dto.external.ApiResponseGames;
 import com.videogamescatalogue.backend.exception.ApiException;
@@ -40,16 +41,37 @@ public class RawgApiClient {
                 .GET()
                 .uri(URI.create(url))
                 .build();
-        ApiResponseGames responseObject = getResponseObject(httpRequest);
+        ApiResponseGames responseObject = getResponseGamesList(httpRequest);
 
         return new ArrayList<>(responseObject.results());
     }
 
-    private ApiResponseGames getResponseObject(HttpRequest httpRequest) {
+    public ApiResponseFullGameDto getGameById(Long id) {
+        String url = BASE_URL + GAME_URL_PART + "/"
+                + id + KEY_URL_PART + apiKey;
+        HttpRequest httpRequest = HttpRequest.newBuilder()
+                .GET()
+                .uri(URI.create(url))
+                .build();
+        return getIndividualGame(httpRequest);
+    }
+
+    private ApiResponseGames getResponseGamesList(HttpRequest httpRequest) {
         try {
             return objectMapper.readValue(
                     getHttpResponse(httpRequest).body(),
                     ApiResponseGames.class);
+        } catch (JacksonException e) {
+            throw new ObjectMapperException("URL: " + httpRequest.uri()
+                    + " Failed to read httpResponse: ", e);
+        }
+    }
+
+    private ApiResponseFullGameDto getIndividualGame(HttpRequest httpRequest) {
+        try {
+            return objectMapper.readValue(
+                    getHttpResponse(httpRequest).body(),
+                    ApiResponseFullGameDto.class);
         } catch (JacksonException e) {
             throw new ObjectMapperException("URL: " + httpRequest.uri()
                     + " Failed to read httpResponse: ", e);

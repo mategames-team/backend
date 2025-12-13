@@ -1,5 +1,6 @@
 package com.videogamescatalogue.backend.service.game;
 
+import com.videogamescatalogue.backend.dto.external.ApiResponseFullGameDto;
 import com.videogamescatalogue.backend.dto.external.ApiResponseGameDto;
 import com.videogamescatalogue.backend.dto.internal.GameSearchParameters;
 import com.videogamescatalogue.backend.dto.internal.game.GameDto;
@@ -46,7 +47,16 @@ public class GameServiceImpl implements GameService {
         if (gameOptional.isEmpty()) {
             throw new EntityNotFoundException("There is no game in DB by api id:" + apiId);
         }
-        return gameMapper.toDto(gameOptional.get());
+
+        Game dbGame = gameOptional.get();
+
+        if (dbGame.getDescription() == null) {
+            ApiResponseFullGameDto game = apiClient.getGameById(apiId);
+            dbGame.setDescription(game.description());
+            Game savedGame = gameRepository.save(dbGame);
+            return gameMapper.toDto(savedGame);
+        }
+        return gameMapper.toDto(dbGame);
     }
 
     @Override
