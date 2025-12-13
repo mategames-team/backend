@@ -1,10 +1,12 @@
 package com.videogamescatalogue.backend.service;
 
 import com.videogamescatalogue.backend.dto.internal.GameDto;
+import com.videogamescatalogue.backend.dto.internal.GameSearchParameters;
 import com.videogamescatalogue.backend.model.Genre;
 import com.videogamescatalogue.backend.model.Platform;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 
 public interface GameService {
     void fetchFromDb();
@@ -18,4 +20,6 @@ public interface GameService {
     Page<GameDto> getByYear(int year, Pageable pageable);
 
     Page<GameDto> getFromDbByPlatform(Platform.GeneralName platform, Pageable pageable);
+
+    Page<GameDto> search(GameSearchParameters searchParameters, Pageable pageable);
 }

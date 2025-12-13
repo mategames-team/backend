@@ -31,6 +31,7 @@ public class Platform {
     @Column(nullable = false, name = "is_deleted")
     private boolean isDeleted = false;
 
+    @Getter
     public enum GeneralName {
         PC("PC"),
         PLAYSTATION("PlayStation"),

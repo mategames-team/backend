@@ -31,6 +31,7 @@ public class Genre {
     @Column(nullable = false, name = "is_deleted")
     private boolean isDeleted = false;
 
+    @Getter
     public enum Name {
         ACTION("Action"),
         INDIE("Indie"),

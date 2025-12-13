@@ -60,4 +60,18 @@ public class Game {
 
     @Column(nullable = false, name = "is_deleted")
     private boolean isDeleted = false;
+
+    @Getter
+    public enum SpecificationKey {
+        NAME("name"),
+        YEAR("year"),
+        PLATFORMS("platforms"),
+        GENRES("genres");
+
+        private final String value;
+
+        SpecificationKey(String value) {
+            this.value = value;
+        }
+    }
 }
