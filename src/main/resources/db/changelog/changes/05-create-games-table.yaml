@@ -37,6 +37,9 @@ databaseChangeLog:
               - column:
                   name: api_rating
                   type: DECIMAL(4,2)
+                  constraints:
+                    nullable: false
+                    unique: true
 
               - column:
                   name: description

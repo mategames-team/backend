@@ -6,7 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface GameService {
-    void fetchFromDb();
+    void fetchBestGames();
+
+    GameDto fetchSingleGame(Long id);
 
     Page<GameDto> getAllGamesFromDb(Pageable pageable);
 
