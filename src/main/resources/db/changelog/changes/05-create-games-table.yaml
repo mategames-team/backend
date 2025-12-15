@@ -19,6 +19,7 @@ databaseChangeLog:
                   type: BIGINT
                   constraints:
                     nullable: false
+                    unique: true
 
               - column:
                   name: name
@@ -39,7 +40,6 @@ databaseChangeLog:
                   type: DECIMAL(4,2)
                   constraints:
                     nullable: false
-                    unique: true
 
               - column:
                   name: description

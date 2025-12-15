@@ -91,7 +91,7 @@ public class RawgApiClient {
         } catch (IOException | InterruptedException e) {
             throw new ApiException("URL: "
                     + httpRequest.uri()
-                    + " Cannot get all games from API: ", e);
+                    + " Cannot get all game(s) from API: ", e);
         }
     }
 }

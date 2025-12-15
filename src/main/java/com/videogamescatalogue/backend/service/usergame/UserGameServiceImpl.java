@@ -26,41 +26,31 @@ public class UserGameServiceImpl implements UserGameService {
     private final UserGameMapper userGameMapper;
     private final GameMapper gameMapper;
 
-
     @Override
     public UserGameDto createOrUpdate(CreateUserGameDto createDto, User user) {
         //usergame is in db so update
-        Optional<UserGame> userGameOptional = userGameRepository.findByUser_IdAndGame_ApiId(
+        Optional<UserGame> userGameOptional = userGameRepository.findByUserIdAndGameApiId(
                 user.getId(),
                 createDto.apiId()
         );
         if (userGameOptional.isPresent()) {
-            UserGame userGame = userGameOptional.get();
-            userGame.setStatus(createDto.status());
-            UserGame savedUserGame = userGameRepository.save(userGame);
-            return userGameMapper.toDto(savedUserGame);
+            return updateUserGame(createDto.status(), userGameOptional.get());
         }
 
         ////create new usergame, check if game in db
-        UserGame userGame = new UserGame();
-        userGame.setUser(user);
-        userGame.setStatus(createDto.status());
-        Optional<Game> gameOptional = gameRepository.findByApiId(createDto.apiId());
+        UserGame userGame = createNewUserGame(createDto, user);
 
         //////game in db
+        Optional<Game> gameOptional = gameRepository.findByApiId(createDto.apiId());
         if (gameOptional.isPresent()) {
-            userGame.setGame(gameOptional.get());
+            return updateWithGameAndSave(userGame, gameOptional.get());
         }
 
         //////game not in db
-        ApiResponseFullGameDto apiGame = apiClient.getGameById(createDto.apiId());
-        Game game = gameMapper.toModel(apiGame);
+        Game game = getGameFromApi(createDto.apiId());
         Game savedGame = gameRepository.save(game);
 
-        userGame.setGame(savedGame);
-
-        UserGame savedUserGame = userGameRepository.save(userGame);
-        return userGameMapper.toDto(savedUserGame);
+        return updateWithGameAndSave(userGame, savedGame);
     }
 
     @Override
@@ -80,5 +70,29 @@ public class UserGameServiceImpl implements UserGameService {
             throw new AccessNotAllowedException("User with id: "
                     + userId + "is not allowed to access userGame with id: " + id);
         }
+    }
+
+    private UserGameDto updateWithGameAndSave(UserGame userGame, Game game) {
+        userGame.setGame(game);
+        UserGame savedUserGame = userGameRepository.save(userGame);
+        return userGameMapper.toDto(savedUserGame);
+    }
+
+    private UserGame createNewUserGame(CreateUserGameDto createDto, User user) {
+        UserGame userGame = new UserGame();
+        userGame.setUser(user);
+        userGame.setStatus(createDto.status());
+        return userGame;
+    }
+
+    private UserGameDto updateUserGame(UserGame.GameStatus status, UserGame userGame) {
+        userGame.setStatus(status);
+        UserGame savedUserGame = userGameRepository.save(userGame);
+        return userGameMapper.toDto(savedUserGame);
+    }
+
+    private Game getGameFromApi(Long apiId) {
+        ApiResponseFullGameDto apiGame = apiClient.getGameById(apiId);
+        return gameMapper.toModel(apiGame);
     }
 }
