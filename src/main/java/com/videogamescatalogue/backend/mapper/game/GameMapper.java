@@ -20,6 +20,7 @@ import org.mapstruct.Named;
 public interface GameMapper {
     List<Game> toModelList(List<ApiResponseGameDto> games);
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(source = "id", target = "apiId")
     @Mapping(source = "released", target = "year", qualifiedByName = "toYear")
     @Mapping(source = "platforms", target = "platforms", qualifiedByName = "toPlatformsSet")
@@ -27,6 +28,7 @@ public interface GameMapper {
     @Mapping(source = "rating", target = "apiRating")
     Game toModel(ApiResponseGameDto apiResponseGameDto);
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(source = "id", target = "apiId")
     @Mapping(source = "released", target = "year", qualifiedByName = "toYear")
     @Mapping(source = "platforms", target = "platforms", qualifiedByName = "toPlatformsSet")

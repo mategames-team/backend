@@ -2,7 +2,8 @@ package com.videogamescatalogue.backend.dto.internal.usergame;
 
 public record UserGameDto(
         Long id,
-        Long userid,
+        Long userId,
+        Long gameId,
         Long gameApiId,
         String status
 ) {

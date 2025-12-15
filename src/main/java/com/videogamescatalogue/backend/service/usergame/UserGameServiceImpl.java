@@ -15,6 +15,8 @@ import com.videogamescatalogue.backend.repository.UserGameRepository;
 import com.videogamescatalogue.backend.service.RawgApiClient;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -34,7 +36,7 @@ public class UserGameServiceImpl implements UserGameService {
                 createDto.apiId()
         );
         if (userGameOptional.isPresent()) {
-            return updateUserGame(createDto.status(), userGameOptional.get());
+            return updateUserGameStatus(createDto.status(), userGameOptional.get());
         }
 
         ////create new usergame, check if game in db
@@ -43,20 +45,29 @@ public class UserGameServiceImpl implements UserGameService {
         //////game in db
         Optional<Game> gameOptional = gameRepository.findByApiId(createDto.apiId());
         if (gameOptional.isPresent()) {
-            return updateWithGameAndSave(userGame, gameOptional.get());
+            return addGameAndSave(userGame, gameOptional.get());
         }
 
         //////game not in db
         Game game = getGameFromApi(createDto.apiId());
         Game savedGame = gameRepository.save(game);
 
-        return updateWithGameAndSave(userGame, savedGame);
+        return addGameAndSave(userGame, savedGame);
     }
 
     @Override
     public void delete(Long id, User user) {
         checkBelongsToUser(id, user.getId());
         userGameRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<UserGameDto> getByStatus(
+            UserGame.GameStatus status,
+            Long userId,
+            Pageable pageable) {
+        Page<UserGame> userGames = userGameRepository.findByUserIdAndStatus(userId, status, pageable);
+        return userGames.map(userGameMapper::toDto);
     }
 
     private void checkBelongsToUser(Long id, Long userId) {
@@ -72,7 +83,7 @@ public class UserGameServiceImpl implements UserGameService {
         }
     }
 
-    private UserGameDto updateWithGameAndSave(UserGame userGame, Game game) {
+    private UserGameDto addGameAndSave(UserGame userGame, Game game) {
         userGame.setGame(game);
         UserGame savedUserGame = userGameRepository.save(userGame);
         return userGameMapper.toDto(savedUserGame);
@@ -85,7 +96,7 @@ public class UserGameServiceImpl implements UserGameService {
         return userGame;
     }
 
-    private UserGameDto updateUserGame(UserGame.GameStatus status, UserGame userGame) {
+    private UserGameDto updateUserGameStatus(UserGame.GameStatus status, UserGame userGame) {
         userGame.setStatus(status);
         UserGame savedUserGame = userGameRepository.save(userGame);
         return userGameMapper.toDto(savedUserGame);
