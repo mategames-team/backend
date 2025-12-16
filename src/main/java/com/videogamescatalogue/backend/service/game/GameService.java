@@ -10,11 +10,9 @@ public interface GameService {
 
     void fetchAndUpdateBestGames();
 
-    GameDto fetchSingleGame(Long id);
-
     Page<GameDto> getAllGamesFromDb(Pageable pageable);
 
-    GameDto getFromDbByApiId(Long id);
+    GameDto getByApiId(Long id);
 
     Page<GameDto> search(GameSearchParameters searchParameters, Pageable pageable);
 }
