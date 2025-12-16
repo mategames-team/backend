@@ -17,9 +17,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class RawgApiClient {
@@ -42,7 +44,9 @@ public class RawgApiClient {
     public List<ApiResponseGameDto> getBestGames() {
         ArrayList<ApiResponseGameDto> result = new ArrayList<>();
 
-        for (int i = 1; i < 2; i++) {
+        for (int i = 1; i < 11; i++) {
+            log.info("Create request for page: " + i);
+
             String url = BASE_URL + GAME_URL_PART
                     + KEY_URL_PART + apiKey
                     + ORDERING_URL_PART
@@ -54,11 +58,19 @@ public class RawgApiClient {
             HttpRequest httpRequest = HttpRequest.newBuilder()
                     .GET()
                     .uri(URI.create(url))
+                    .header("User-Agent", "VideoGamesCatalogue")
                     .build();
             ApiResponseGames responseObject = getResponseGamesList(httpRequest);
 
             result.addAll(responseObject.results());
+
+            log.info("Added games to resul list. Result list size: " + result.size());
         }
+
+        log.info(
+                "Formed result list with fetched games to return. List size: "
+                + result.size()
+        );
 
         return result;
     }
@@ -69,6 +81,7 @@ public class RawgApiClient {
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .GET()
                 .uri(URI.create(url))
+                .header("User-Agent", "VideoGamesCatalogue")
                 .build();
         return getIndividualGame(httpRequest);
     }
@@ -97,6 +110,7 @@ public class RawgApiClient {
 
     private HttpResponse<String> getHttpResponse(HttpRequest httpRequest) {
         try {
+            log.info("Send request to API");
             HttpResponse<String> response = httpClient.send(httpRequest,
                     HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
