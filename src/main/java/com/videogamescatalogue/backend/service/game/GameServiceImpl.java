@@ -10,14 +10,20 @@ import com.videogamescatalogue.backend.model.Game;
 import com.videogamescatalogue.backend.repository.GameRepository;
 import com.videogamescatalogue.backend.repository.SpecificationBuilder;
 import com.videogamescatalogue.backend.service.RawgApiClient;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class GameServiceImpl implements GameService {
@@ -28,9 +34,31 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void fetchBestGames() {
-        List<ApiResponseGameDto> apiGames = apiClient.getAllGames();
+        List<ApiResponseGameDto> apiGames = apiClient.getBestGames();
+        log.info("Received list of games from Api. List size: " + apiGames.size());
 
         List<Game> modelList = gameMapper.toModelList(apiGames);
+
+        Map<Long, Game> existingGamesMap = getExistingGamesMap(modelList);
+        List<Game> toSaveGames = new ArrayList<>();
+
+        for (Game game : modelList) {
+            if (!existingGamesMap.containsKey(game.getApiId())) {
+                toSaveGames.add(game);
+            }
+        }
+
+        gameRepository.saveAll(toSaveGames);
+        log.info("Saved games to DB");
+    }
+
+    @Override
+    public void fetchAndUpdateBestGames() {
+        List<ApiResponseGameDto> apiGames = apiClient.getBestGames();
+        List<Game> modelList = gameMapper.toModelList(apiGames);
+
+        Map<Long, Game> existingGamesMap = getExistingGamesMap(modelList);
+        setIdIfExistingGame(modelList, existingGamesMap);
 
         gameRepository.saveAll(modelList);
     }
@@ -75,5 +103,26 @@ public class GameServiceImpl implements GameService {
 
         return gameRepository.findAll(specification, pageable)
                 .map(gameMapper::toDto);
+    }
+
+    private Map<Long, Game> getExistingGamesMap(List<Game> modelList) {
+        List<Long> apiIds = modelList.stream()
+                .map(Game::getApiId)
+                .toList();
+        List<Game> existingGames = gameRepository.findAllByApiIdIn(apiIds);
+        return existingGames.stream()
+                .collect(Collectors.toMap(
+                        Game::getApiId, Function.identity()
+                ));
+    }
+
+    private void setIdIfExistingGame(List<Game> modelList, Map<Long, Game> existingGamesMap) {
+        for (Game game : modelList) {
+            if (existingGamesMap.containsKey(game.getApiId())) {
+                game.setId(
+                        existingGamesMap.get(game.getApiId()).getId()
+                );
+            }
+        }
     }
 }
