@@ -92,6 +92,7 @@ public class RawgApiClient {
                     getHttpResponse(httpRequest).body(),
                     ApiResponseGames.class);
         } catch (JacksonException e) {
+            log.error("Failed to read httpResponse:", e);
             throw new ObjectMapperException("URL: " + httpRequest.uri()
                     + " Failed to read httpResponse: ", e);
         }
@@ -103,6 +104,7 @@ public class RawgApiClient {
                     getHttpResponse(httpRequest).body(),
                     ApiResponseFullGameDto.class);
         } catch (JacksonException e) {
+            log.error("Failed to read httpResponse:", e);
             throw new ObjectMapperException("URL: " + httpRequest.uri()
                     + " Failed to read httpResponse: ", e);
         }
@@ -114,15 +116,19 @@ public class RawgApiClient {
             HttpResponse<String> response = httpClient.send(httpRequest,
                     HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
+                log.error("Received non-200 status code."
+                        + "Response status code: "
+                        + response.statusCode());
                 throw new HttpResponseException("Received non-200 status code. "
                         + "Response status code: "
                         + response.statusCode());
             }
             return response;
         } catch (IOException | InterruptedException e) {
+            log.error("Failed to get game(s) from API: ", e);
             throw new ApiException("URL: "
                     + httpRequest.uri()
-                    + " Cannot get all game(s) from API: ", e);
+                    + " Cannot get game(s) from API: ", e);
         }
     }
 }
