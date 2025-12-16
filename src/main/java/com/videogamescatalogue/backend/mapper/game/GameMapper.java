@@ -1,6 +1,7 @@
 package com.videogamescatalogue.backend.mapper.game;
 
 import com.videogamescatalogue.backend.config.MapperConfig;
+import com.videogamescatalogue.backend.dto.external.ApiResponseFullGameDto;
 import com.videogamescatalogue.backend.dto.external.ApiResponseGameDto;
 import com.videogamescatalogue.backend.dto.internal.game.GameDto;
 import com.videogamescatalogue.backend.exception.ApiException;
@@ -19,12 +20,21 @@ import org.mapstruct.Named;
 public interface GameMapper {
     List<Game> toModelList(List<ApiResponseGameDto> games);
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(source = "id", target = "apiId")
     @Mapping(source = "released", target = "year", qualifiedByName = "toYear")
     @Mapping(source = "platforms", target = "platforms", qualifiedByName = "toPlatformsSet")
     @Mapping(source = "genres", target = "genres", qualifiedByName = "toGenresSet")
     @Mapping(source = "rating", target = "apiRating")
     Game toModel(ApiResponseGameDto apiResponseGameDto);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(source = "id", target = "apiId")
+    @Mapping(source = "released", target = "year", qualifiedByName = "toYear")
+    @Mapping(source = "platforms", target = "platforms", qualifiedByName = "toPlatformsSet")
+    @Mapping(source = "genres", target = "genres", qualifiedByName = "toGenresSet")
+    @Mapping(source = "rating", target = "apiRating")
+    Game toModel(ApiResponseFullGameDto apiResponseGameDto);
 
     @Mapping(source = "platforms", target = "platforms", qualifiedByName = "toPlatfromDtosSet")
     GameDto toDto(Game game);

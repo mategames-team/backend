@@ -19,6 +19,7 @@ databaseChangeLog:
                   type: BIGINT
                   constraints:
                     nullable: false
+                    unique: true
 
               - column:
                   name: name
@@ -37,6 +38,8 @@ databaseChangeLog:
               - column:
                   name: api_rating
                   type: DECIMAL(4,2)
+                  constraints:
+                    nullable: false
 
               - column:
                   name: description

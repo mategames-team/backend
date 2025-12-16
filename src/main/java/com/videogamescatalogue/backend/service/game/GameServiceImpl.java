@@ -27,12 +27,22 @@ public class GameServiceImpl implements GameService {
     private final SpecificationBuilder<Game, GameSearchParameters> specificationBuilder;
 
     @Override
-    public void fetchFromDb() {
+    public void fetchBestGames() {
         List<ApiResponseGameDto> apiGames = apiClient.getAllGames();
 
         List<Game> modelList = gameMapper.toModelList(apiGames);
 
         gameRepository.saveAll(modelList);
+    }
+
+    @Override
+    public GameDto fetchSingleGame(Long id) {
+        ApiResponseFullGameDto apiGame = apiClient.getGameById(id);
+        Game game = gameMapper.toModel(apiGame);
+
+        Game savedGame = gameRepository.save(game);
+
+        return gameMapper.toDto(savedGame);
     }
 
     @Override
