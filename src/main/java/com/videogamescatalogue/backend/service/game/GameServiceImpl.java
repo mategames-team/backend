@@ -75,11 +75,9 @@ public class GameServiceImpl implements GameService {
         //game not in db, fetch from api
         Optional<Game> gameOptional = gameRepository.findByApiId(apiId);
         if (gameOptional.isEmpty()) {
-            ApiResponseFullGameDto apiGame = apiClient.getGameById(id);
+            ApiResponseFullGameDto apiGame = apiClient.getGameById(apiId);
             Game game = gameMapper.toModel(apiGame);
-
             Game savedGame = gameRepository.save(game);
-
             return gameMapper.toDto(savedGame);
         }
 
@@ -87,7 +85,7 @@ public class GameServiceImpl implements GameService {
         Game game = gameOptional.get();
         ////game descr is null
         if (game.getDescription() == null) {
-            ApiResponseFullGameDto apiGame = apiClient.getGameById(id);
+            ApiResponseFullGameDto apiGame = apiClient.getGameById(apiId);
             game.setDescription(apiGame.description());
             Game savedGame = gameRepository.save(game);
             return gameMapper.toDto(savedGame);
