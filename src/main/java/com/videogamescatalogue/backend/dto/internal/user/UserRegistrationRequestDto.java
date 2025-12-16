@@ -1,9 +1,13 @@
 package com.videogamescatalogue.backend.dto.internal.user;
 
+import com.videogamescatalogue.backend.validation.FieldMatch;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+@FieldMatch(first = "password",
+        second = "repeatPassword",
+        message = "Password and repeat password must match")
 public record UserRegistrationRequestDto(
         @NotBlank(message = "Username is required. Please provide username.")
         String profileName,
@@ -15,6 +19,10 @@ public record UserRegistrationRequestDto(
         String repeatPassword,
         @Email(message = "Invalid format of email.")
         @NotBlank(message = "Email is required. Please provide your email.")
-        String email
+        String email,
+        @Size(max = 5000, message = "About user info must be less than 5000 digits")
+        String about,
+        @Size(max = 50, message = "Location info must be less than 50 digits")
+        String location
 ) {
 }

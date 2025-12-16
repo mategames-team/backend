@@ -39,6 +39,10 @@ public class User implements UserDetails {
     @Column(nullable = false, unique = true)
     private String email;
 
+    private String about;
+
+    private String location;
+
     @ManyToMany
     @JoinTable(
             name = "users_games",

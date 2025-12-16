@@ -17,11 +17,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-@Slf4j
+@Log4j2
 @RequiredArgsConstructor
 @Service
 public class RawgApiClient {
@@ -45,7 +45,7 @@ public class RawgApiClient {
         ArrayList<ApiResponseGameDto> result = new ArrayList<>();
 
         for (int i = 1; i < 11; i++) {
-            log.info("Create request for page: " + i);
+            log.info("Create request for page {}", i);
 
             String url = BASE_URL + GAME_URL_PART
                     + KEY_URL_PART + apiKey
@@ -64,12 +64,12 @@ public class RawgApiClient {
 
             result.addAll(responseObject.results());
 
-            log.info("Added games to resul list. Result list size: " + result.size());
+            log.info("Added games to resul list. Result list size={}", result.size());
         }
 
         log.info(
-                "Formed result list with fetched games to return. List size: "
-                + result.size()
+                "Formed result list with fetched games to return. List size={}",
+                result.size()
         );
 
         return result;
@@ -116,16 +116,12 @@ public class RawgApiClient {
             HttpResponse<String> response = httpClient.send(httpRequest,
                     HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
-                log.error("Received non-200 status code."
-                        + "Response status code: "
-                        + response.statusCode());
                 throw new HttpResponseException("Received non-200 status code. "
                         + "Response status code: "
                         + response.statusCode());
             }
             return response;
         } catch (IOException | InterruptedException e) {
-            log.error("Failed to get game(s) from API: ", e);
             throw new ApiException("URL: "
                     + httpRequest.uri()
                     + " Cannot get game(s) from API: ", e);
