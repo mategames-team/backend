@@ -9,5 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface UserGameRepository extends JpaRepository<UserGame, Long> {
     Optional<UserGame> findByUserIdAndGameApiId(Long userId, Long apiId);
 
-    Page<UserGame> findByUserIdAndStatus(Long userId, UserGame.GameStatus status, Pageable pageable);
+    Page<UserGame> findByUserIdAndStatus(
+            Long userId, UserGame.GameStatus status, Pageable pageable
+    );
 }

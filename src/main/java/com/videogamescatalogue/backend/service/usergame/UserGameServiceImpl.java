@@ -30,7 +30,6 @@ public class UserGameServiceImpl implements UserGameService {
 
     @Override
     public UserGameDto createOrUpdate(CreateUserGameDto createDto, User user) {
-        //usergame is in db so update
         Optional<UserGame> userGameOptional = userGameRepository.findByUserIdAndGameApiId(
                 user.getId(),
                 createDto.apiId()
@@ -39,16 +38,13 @@ public class UserGameServiceImpl implements UserGameService {
             return updateUserGameStatus(createDto.status(), userGameOptional.get());
         }
 
-        ////create new usergame, check if game in db
         UserGame userGame = createNewUserGame(createDto, user);
 
-        //////game in db
         Optional<Game> gameOptional = gameRepository.findByApiId(createDto.apiId());
         if (gameOptional.isPresent()) {
             return addGameAndSave(userGame, gameOptional.get());
         }
 
-        //////game not in db
         Game game = getGameFromApi(createDto.apiId());
         Game savedGame = gameRepository.save(game);
 
@@ -66,7 +62,9 @@ public class UserGameServiceImpl implements UserGameService {
             UserGame.GameStatus status,
             Long userId,
             Pageable pageable) {
-        Page<UserGame> userGames = userGameRepository.findByUserIdAndStatus(userId, status, pageable);
+        Page<UserGame> userGames = userGameRepository.findByUserIdAndStatus(
+                userId, status, pageable
+        );
         return userGames.map(userGameMapper::toDto);
     }
 

@@ -10,8 +10,7 @@ import org.springframework.context.annotation.Profile;
 @Profile("!test")
 @RequiredArgsConstructor
 @SpringBootApplication
-public class VideogamescatalogueBackendApplication implements CommandLineRunner
-{
+public class VideogamescatalogueBackendApplication implements CommandLineRunner {
     private final GameService gameService;
 
     public static void main(String[] args) {
