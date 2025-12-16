@@ -10,8 +10,7 @@ import org.springframework.context.annotation.Profile;
 @Profile("!test")
 @RequiredArgsConstructor
 @SpringBootApplication
-public class VideogamescatalogueBackendApplication
-//        implements CommandLineRunner
+public class VideogamescatalogueBackendApplication implements CommandLineRunner
 {
     private final GameService gameService;
 
@@ -19,8 +18,8 @@ public class VideogamescatalogueBackendApplication
         SpringApplication.run(VideogamescatalogueBackendApplication.class, args);
     }
 
-//    @Override
-//    public void run(String... args) throws Exception {
-//        gameService.fetchBestGames();
-//    }
+    @Override
+    public void run(String... args) throws Exception {
+        gameService.fetchBestGames();
+    }
 }
