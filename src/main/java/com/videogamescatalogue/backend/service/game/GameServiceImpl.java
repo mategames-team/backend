@@ -35,7 +35,8 @@ public class GameServiceImpl implements GameService {
     @Override
     public void fetchBestGames() {
         List<ApiResponseGameDto> apiGames = apiClient.getBestGames();
-        log.info("Received list of games from Api. List size: " + apiGames.size());
+        log.info("Received list of games from Api. List size={}",
+                apiGames.size());
 
         List<Game> modelList = gameMapper.toModelList(apiGames);
 

@@ -33,6 +33,14 @@ databaseChangeLog:
                     nullable: false
 
               - column:
+                  name: about
+                  type: VARCHAR(5000)
+
+              - column:
+                  name: location
+                  type: VARCHAR(50)
+
+              - column:
                   name: is_deleted
                   type: BOOLEAN
                   defaultValueBoolean: false
