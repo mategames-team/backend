@@ -42,7 +42,7 @@ public class RawgApiClient {
     public List<ApiResponseGameDto> getBestGames() {
         ArrayList<ApiResponseGameDto> result = new ArrayList<>();
 
-        for (int i = 1; i < 10; i++) {
+        for (int i = 1; i < 2; i++) {
             String url = BASE_URL + GAME_URL_PART
                     + KEY_URL_PART + apiKey
                     + ORDERING_URL_PART
