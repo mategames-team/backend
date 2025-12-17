@@ -4,7 +4,6 @@ import com.videogamescatalogue.backend.dto.external.ApiResponseFullGameDto;
 import com.videogamescatalogue.backend.dto.external.ApiResponseGameDto;
 import com.videogamescatalogue.backend.dto.internal.GameSearchParameters;
 import com.videogamescatalogue.backend.dto.internal.game.GameDto;
-import com.videogamescatalogue.backend.exception.EntityNotFoundException;
 import com.videogamescatalogue.backend.mapper.game.GameMapper;
 import com.videogamescatalogue.backend.model.Game;
 import com.videogamescatalogue.backend.repository.GameRepository;
@@ -72,7 +71,6 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public GameDto getByApiId(Long apiId) {
-        //game not in db, fetch from api
         Optional<Game> gameOptional = gameRepository.findByApiId(apiId);
         if (gameOptional.isEmpty()) {
             ApiResponseFullGameDto apiGame = apiClient.getGameById(apiId);
@@ -81,16 +79,15 @@ public class GameServiceImpl implements GameService {
             return gameMapper.toDto(savedGame);
         }
 
-        //game is in db
         Game game = gameOptional.get();
-        ////game descr is null
+
         if (game.getDescription() == null) {
             ApiResponseFullGameDto apiGame = apiClient.getGameById(apiId);
             game.setDescription(apiGame.description());
             Game savedGame = gameRepository.save(game);
             return gameMapper.toDto(savedGame);
         }
-        ////game descr is present
+
         return gameMapper.toDto(game);
     }
 
