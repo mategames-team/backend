@@ -36,13 +36,14 @@ public interface GameMapper {
     @Mapping(source = "rating", target = "apiRating")
     Game toModel(ApiResponseFullGameDto apiResponseGameDto);
 
-    @Mapping(source = "platforms", target = "platforms", qualifiedByName = "toPlatfromDtosSet")
+    @Mapping(source = "platforms", target = "platforms", qualifiedByName = "toPlatformDtosSet")
+    @Mapping(source = "genres", target = "genres", qualifiedByName = "toGenreDtosSet")
     GameDto toDto(Game game);
 
     @Named("toYear")
-    default int toYear(String releasedDate) {
-        if (releasedDate == null) {
-            throw new ApiException("Release date should not be null");
+    default Integer toYear(String releasedDate) {
+        if (releasedDate == null || releasedDate.isBlank()) {
+            return null;
         }
         try {
             LocalDate localDate = LocalDate.parse(releasedDate);

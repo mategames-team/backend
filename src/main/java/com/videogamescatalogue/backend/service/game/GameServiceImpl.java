@@ -94,7 +94,9 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public Page<GameDto> getAllGamesFromApi(Pageable pageable) {
-        return null;
+        return apiClient.getAllGames(pageable)
+                .map(gameMapper::toModel)
+                .map(gameMapper::toDto);
     }
 
     @Override

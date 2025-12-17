@@ -56,7 +56,7 @@ public class PlatformProvider {
         return gamePlatforms;
     }
 
-    @Named("toPlatfromDtosSet")
+    @Named("toPlatformDtosSet")
     public Set<PlatformDto> toPlatformDtosSet(Set<Platform> platforms) {
         return platformMapper.toPlatfromDtosSet(platforms);
     }

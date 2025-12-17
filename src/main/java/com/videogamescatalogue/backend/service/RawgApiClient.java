@@ -19,6 +19,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -79,22 +81,24 @@ public class RawgApiClient {
         return result;
     }
 
-    public List<ApiResponseGameDto> getAllGames(Pageable pageable) {
-        String ordering = toRawgOrdering(pageable.getSort());
+    public Page<ApiResponseGameDto> getAllGames(Pageable pageable) {
         String url = BASE_URL + GAME_URL_PART
                 + KEY_URL_PART + apiKey
                 + PAGE_SIZE_URL_PART + pageable.getPageSize()
                 + PAGE_NUMBER_URL_PART + pageable.getPageNumber() + 1;
+
+        String ordering = toRawgOrdering(pageable.getSort());
         if (ordering != null) {
             url = url + ORDERING_URL_PART + ordering;
         }
+
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .GET()
                 .uri(URI.create(url))
                 .header("User-Agent", "VideoGamesCatalogue")
                 .build();
         ApiResponseGames responseObject = getResponseGamesList(httpRequest);
-        return responseObject.results();
+        return new PageImpl<>(responseObject.results(), pageable, responseObject.count());
     }
 
     public ApiResponseFullGameDto getGameById(Long id) {
