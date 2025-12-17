@@ -4,7 +4,6 @@ import com.videogamescatalogue.backend.dto.external.ApiResponseFullGameDto;
 import com.videogamescatalogue.backend.dto.external.ApiResponseGameDto;
 import com.videogamescatalogue.backend.dto.internal.GameSearchParameters;
 import com.videogamescatalogue.backend.dto.internal.game.GameDto;
-import com.videogamescatalogue.backend.exception.EntityNotFoundException;
 import com.videogamescatalogue.backend.mapper.game.GameMapper;
 import com.videogamescatalogue.backend.model.Game;
 import com.videogamescatalogue.backend.repository.GameRepository;
@@ -41,8 +40,8 @@ public class GameServiceImpl implements GameService {
         List<Game> modelList = gameMapper.toModelList(apiGames);
 
         Map<Long, Game> existingGamesMap = getExistingGamesMap(modelList);
-        List<Game> toSaveGames = new ArrayList<>();
 
+        List<Game> toSaveGames = new ArrayList<>();
         for (Game game : modelList) {
             if (!existingGamesMap.containsKey(game.getApiId())) {
                 toSaveGames.add(game);
@@ -65,37 +64,31 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public GameDto fetchSingleGame(Long id) {
-        ApiResponseFullGameDto apiGame = apiClient.getGameById(id);
-        Game game = gameMapper.toModel(apiGame);
-
-        Game savedGame = gameRepository.save(game);
-
-        return gameMapper.toDto(savedGame);
-    }
-
-    @Override
     public Page<GameDto> getAllGamesFromDb(Pageable pageable) {
         return gameRepository.findAll(pageable)
                 .map(gameMapper::toDto);
     }
 
     @Override
-    public GameDto getFromDbByApiId(Long apiId) {
+    public GameDto getByApiId(Long apiId) {
         Optional<Game> gameOptional = gameRepository.findByApiId(apiId);
         if (gameOptional.isEmpty()) {
-            throw new EntityNotFoundException("There is no game in DB by api id:" + apiId);
-        }
-
-        Game dbGame = gameOptional.get();
-
-        if (dbGame.getDescription() == null) {
-            ApiResponseFullGameDto game = apiClient.getGameById(apiId);
-            dbGame.setDescription(game.description());
-            Game savedGame = gameRepository.save(dbGame);
+            ApiResponseFullGameDto apiGame = apiClient.getGameById(apiId);
+            Game game = gameMapper.toModel(apiGame);
+            Game savedGame = gameRepository.save(game);
             return gameMapper.toDto(savedGame);
         }
-        return gameMapper.toDto(dbGame);
+
+        Game game = gameOptional.get();
+
+        if (game.getDescription() == null) {
+            ApiResponseFullGameDto apiGame = apiClient.getGameById(apiId);
+            game.setDescription(apiGame.description());
+            Game savedGame = gameRepository.save(game);
+            return gameMapper.toDto(savedGame);
+        }
+
+        return gameMapper.toDto(game);
     }
 
     @Override

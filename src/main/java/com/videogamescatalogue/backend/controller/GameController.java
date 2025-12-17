@@ -34,10 +34,9 @@ public class GameController {
         return gameService.getAllGamesFromDb(pageable);
     }
 
-    @GetMapping("/local/id/{id}")
-    public GameDto getFromDbByApiId(@PathVariable Long id) {
-
-        return gameService.getFromDbByApiId(id);
+    @GetMapping("{id}")
+    public GameDto getByApiId(@PathVariable Long id) {
+        return gameService.getByApiId(id);
     }
 
     @GetMapping("/local/search")
