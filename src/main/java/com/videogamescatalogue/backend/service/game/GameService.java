@@ -14,5 +14,7 @@ public interface GameService {
 
     GameDto getByApiId(Long id);
 
+    Page<GameDto> getAllGamesFromApi(Pageable pageable);
+
     Page<GameDto> search(GameSearchParameters searchParameters, Pageable pageable);
 }

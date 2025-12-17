@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class GameController {
     public static final int DEFAULT_PAGE_SIZE = 30;
+    public static final int DEFAULT_PAGE_NUMBER = 1;
     private final GameService gameService;
 
     @GetMapping("/local")
@@ -37,6 +38,14 @@ public class GameController {
     @GetMapping("{id}")
     public GameDto getByApiId(@PathVariable Long id) {
         return gameService.getByApiId(id);
+    }
+
+    @GetMapping
+    public Page<GameDto> getAllGamesFromApi(
+            @PageableDefault(size = DEFAULT_PAGE_SIZE, page = DEFAULT_PAGE_NUMBER)
+            Pageable pageable
+    ) {
+        return gameService.getAllGamesFromApi(pageable);
     }
 
     @GetMapping("/local/search")

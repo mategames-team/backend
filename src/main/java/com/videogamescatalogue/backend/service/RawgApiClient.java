@@ -19,6 +19,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Log4j2
@@ -29,8 +31,10 @@ public class RawgApiClient {
     private static final String GAME_URL_PART = "games";
     private static final String KEY_URL_PART = "?key=";
     private static final String PAGE_NUMBER_URL_PART = "&page=";
-    private static final String PAGE_SIZE_URL_PART = "&page_size=30";
-    private static final String ORDERING_URL_PART = "&ordering=-added";
+    private static final String PAGE_SIZE_URL_PART = "&page_size=";
+    private static final String DEFAULT_PAGE_SIZE = "30";
+    private static final String ORDERING_URL_PART = "&ordering=";
+    private static final String ORDERING_ADDED_DESC = "-added";
     private static final String EXCLUDE_ADDITIONS_URL_PART = "&exclude_additions=true";
     private static final String DATES_BETWEEN_URL_PART = "&dates=" + LocalDate.now()
             + "%2C" + LocalDate.now().minusMonths(12);
@@ -49,11 +53,11 @@ public class RawgApiClient {
 
             String url = BASE_URL + GAME_URL_PART
                     + KEY_URL_PART + apiKey
-                    + ORDERING_URL_PART
+                    + ORDERING_URL_PART + ORDERING_ADDED_DESC
                     + EXCLUDE_ADDITIONS_URL_PART
                     + DATES_BETWEEN_URL_PART
                     + METACRITIC_URL_PART
-                    + PAGE_SIZE_URL_PART
+                    + PAGE_SIZE_URL_PART + DEFAULT_PAGE_SIZE
                     + PAGE_NUMBER_URL_PART + i;
             HttpRequest httpRequest = HttpRequest.newBuilder()
                     .GET()
@@ -64,15 +68,33 @@ public class RawgApiClient {
 
             result.addAll(responseObject.results());
 
-            log.info("Added games to resul list. Result list size={}", result.size());
+            log.info("Added games to resul list. Result list size={}",
+                    result.size());
         }
 
-        log.info(
-                "Formed result list with fetched games to return. List size={}",
+        log.info("Formed result list with fetched games to return. List size={}",
                 result.size()
         );
 
         return result;
+    }
+
+    public List<ApiResponseGameDto> getAllGames(Pageable pageable) {
+        String ordering = toRawgOrdering(pageable.getSort());
+        String url = BASE_URL + GAME_URL_PART
+                + KEY_URL_PART + apiKey
+                + PAGE_SIZE_URL_PART + pageable.getPageSize()
+                + PAGE_NUMBER_URL_PART + pageable.getPageNumber() + 1;
+        if (ordering != null) {
+            url = url + ORDERING_URL_PART + ordering;
+        }
+        HttpRequest httpRequest = HttpRequest.newBuilder()
+                .GET()
+                .uri(URI.create(url))
+                .header("User-Agent", "VideoGamesCatalogue")
+                .build();
+        ApiResponseGames responseObject = getResponseGamesList(httpRequest);
+        return responseObject.results();
     }
 
     public ApiResponseFullGameDto getGameById(Long id) {
@@ -126,5 +148,18 @@ public class RawgApiClient {
                     + httpRequest.uri()
                     + " Cannot get game(s) from API: ", e);
         }
+    }
+
+    private String toRawgOrdering(Sort sort) {
+        if (sort.isUnsorted()) {
+            return null;
+        }
+        Sort.Order order = sort.iterator().next();
+        String field = order.getProperty();
+        Sort.Direction direction = order.getDirection();
+
+        return direction == Sort.Direction.DESC
+                ? "-" + field
+                : field;
     }
 }
