@@ -85,7 +85,7 @@ public class RawgApiClient {
         String url = BASE_URL + GAME_URL_PART
                 + KEY_URL_PART + apiKey
                 + PAGE_SIZE_URL_PART + pageable.getPageSize()
-                + PAGE_NUMBER_URL_PART + pageable.getPageNumber() + 1;
+                + PAGE_NUMBER_URL_PART + pageable.getPageNumber();
 
         String ordering = toRawgOrdering(pageable.getSort());
         if (ordering != null) {
