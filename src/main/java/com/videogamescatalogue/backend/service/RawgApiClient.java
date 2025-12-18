@@ -48,6 +48,8 @@ public class RawgApiClient {
     private final HttpClient httpClient;
 
     public List<ApiResponseGameDto> getBestGames() {
+        log.info("Called get best games from API");
+
         ArrayList<ApiResponseGameDto> result = new ArrayList<>();
 
         for (int i = 1; i < 11; i++) {
@@ -82,6 +84,8 @@ public class RawgApiClient {
     }
 
     public Page<ApiResponseGameDto> getAllGames(Pageable pageable) {
+        log.info("Called get all games from API");
+
         String url = BASE_URL + GAME_URL_PART
                 + KEY_URL_PART + apiKey
                 + PAGE_SIZE_URL_PART + pageable.getPageSize()
@@ -98,10 +102,15 @@ public class RawgApiClient {
                 .header("User-Agent", "VideoGamesCatalogue")
                 .build();
         ApiResponseGames responseObject = getResponseGamesList(httpRequest);
+
+        log.info("Received response from API");
+
         return new PageImpl<>(responseObject.results(), pageable, responseObject.count());
     }
 
     public ApiResponseFullGameDto getGameById(Long id) {
+        log.info("Called get game by id from API");
+
         String url = BASE_URL + GAME_URL_PART + "/"
                 + id + KEY_URL_PART + apiKey;
         HttpRequest httpRequest = HttpRequest.newBuilder()
@@ -109,7 +118,11 @@ public class RawgApiClient {
                 .uri(URI.create(url))
                 .header("User-Agent", "VideoGamesCatalogue")
                 .build();
-        return getIndividualGame(httpRequest);
+        ApiResponseFullGameDto game = getIndividualGame(httpRequest);
+
+        log.info("Received response from API");
+
+        return game;
     }
 
     private ApiResponseGames getResponseGamesList(HttpRequest httpRequest) {

@@ -17,8 +17,6 @@ import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Table(name = "comments")
-@SQLDelete(sql = "UPDATE comments SET is_deleted = true WHERE id = ?")
-@SQLRestriction(value = "is_deleted = false")
 @Getter
 @Setter
 public class Comment {
@@ -29,6 +27,9 @@ public class Comment {
     @ManyToOne(optional = false)
     @JoinColumn(name = "game_id")
     private Game game;
+
+    @Column(nullable = false)
+    private Long gameApiId;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")

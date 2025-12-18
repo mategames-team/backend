@@ -2,7 +2,7 @@ package com.videogamescatalogue.backend.dto.internal.comment;
 
 public record CommentDto(
         Long id,
-        Long gameId,
+        Long gameApiId,
         Long userId,
         String text,
         String localDateTime,

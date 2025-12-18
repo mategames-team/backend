@@ -35,9 +35,12 @@ public class GameController {
         return gameService.getAllGamesFromDb(pageable);
     }
 
-    @GetMapping("{id}")
-    public GameDto getByApiId(@PathVariable Long id) {
-        return gameService.getByApiId(id);
+    @GetMapping("{gameApiId}")
+    public GameDto getByApiId(
+            @PathVariable Long gameApiId,
+            @PageableDefault(size = DEFAULT_PAGE_SIZE)
+            Pageable pageable) {
+        return gameService.getByApiId(gameApiId);
     }
 
     @GetMapping
