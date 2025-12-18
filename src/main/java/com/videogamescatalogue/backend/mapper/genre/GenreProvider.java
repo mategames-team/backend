@@ -1,6 +1,7 @@
 package com.videogamescatalogue.backend.mapper.genre;
 
 import com.videogamescatalogue.backend.dto.external.ApiResponseGenreDto;
+import com.videogamescatalogue.backend.dto.internal.genre.GenreDto;
 import com.videogamescatalogue.backend.model.Genre;
 import com.videogamescatalogue.backend.repository.GenreRepository;
 import jakarta.annotation.PostConstruct;
@@ -49,6 +50,17 @@ public class GenreProvider {
             gameGenres.add(genre);
         }
         return gameGenres;
+    }
+
+    @Named("toGenreDtosSet")
+    public Set<GenreDto> toGenreDtosSet(Set<Genre> genres) {
+        Set<GenreDto> genreDtos = new HashSet<>();
+
+        for (Genre genre : genres) {
+            GenreDto genreDto = new GenreDto(genre.getName().getValue());
+            genreDtos.add(genreDto);
+        }
+        return genreDtos;
     }
 
     private Genre getDefaultGenre(String name) {

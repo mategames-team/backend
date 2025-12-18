@@ -92,6 +92,13 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
+    public Page<GameDto> getAllGamesFromApi(Pageable pageable) {
+        return apiClient.getAllGames(pageable)
+                .map(gameMapper::toModel)
+                .map(gameMapper::toDto);
+    }
+
+    @Override
     public Page<GameDto> search(GameSearchParameters searchParameters, Pageable pageable) {
         Specification<Game> specification = specificationBuilder.build(searchParameters);
 

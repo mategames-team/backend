@@ -35,7 +35,7 @@ public class Game {
     @Column(nullable = false)
     private String name;
 
-    private int year;
+    private Integer year;
 
     private String backgroundImage;
 
