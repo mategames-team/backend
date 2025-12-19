@@ -14,7 +14,7 @@ public interface CommentService {
             User user
     );
 
-    Page<CommentDto> getCommentsForGame(Long id, Pageable pageable);
+    Page<CommentDto> getCommentsForGame(Long gameApiId, Pageable pageable);
 
     CommentDto update(Long commentId, UpdateCommentRequestDto requestDto, Long userId);
 
