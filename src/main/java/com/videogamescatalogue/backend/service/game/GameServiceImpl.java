@@ -4,10 +4,14 @@ import com.videogamescatalogue.backend.dto.external.ApiResponseFullGameDto;
 import com.videogamescatalogue.backend.dto.external.ApiResponseGameDto;
 import com.videogamescatalogue.backend.dto.internal.GameSearchParameters;
 import com.videogamescatalogue.backend.dto.internal.game.GameDto;
+import com.videogamescatalogue.backend.dto.internal.game.GameWithStatusDto;
 import com.videogamescatalogue.backend.mapper.game.GameMapper;
 import com.videogamescatalogue.backend.model.Game;
+import com.videogamescatalogue.backend.model.User;
+import com.videogamescatalogue.backend.model.UserGame;
 import com.videogamescatalogue.backend.repository.GameRepository;
 import com.videogamescatalogue.backend.repository.SpecificationBuilder;
+import com.videogamescatalogue.backend.repository.UserGameRepository;
 import com.videogamescatalogue.backend.service.RawgApiClient;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +34,7 @@ public class GameServiceImpl implements GameService {
     private final GameMapper gameMapper;
     private final GameRepository gameRepository;
     private final SpecificationBuilder<Game, GameSearchParameters> specificationBuilder;
+    private final UserGameRepository userGameRepository;
 
     @Override
     public void fetchBestGames() {
@@ -49,7 +54,7 @@ public class GameServiceImpl implements GameService {
         }
 
         gameRepository.saveAll(toSaveGames);
-        log.info("Saved games to DB");
+        log.info("Saved {} games to DB", toSaveGames.size());
     }
 
     @Override
@@ -70,25 +75,12 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public GameDto getByApiId(Long apiId) {
-        Optional<Game> gameOptional = gameRepository.findByApiId(apiId);
-        if (gameOptional.isEmpty()) {
-            ApiResponseFullGameDto apiGame = apiClient.getGameById(apiId);
-            Game game = gameMapper.toModel(apiGame);
-            Game savedGame = gameRepository.save(game);
-            return gameMapper.toDto(savedGame);
-        }
+    public GameWithStatusDto getByApiId(Long apiId, User user) {
+        Game game = findOrUpdate(apiId);
 
-        Game game = gameOptional.get();
+        UserGame.GameStatus status = getGameStatus(apiId, user);
 
-        if (game.getDescription() == null) {
-            ApiResponseFullGameDto apiGame = apiClient.getGameById(apiId);
-            game.setDescription(apiGame.description());
-            Game savedGame = gameRepository.save(game);
-            return gameMapper.toDto(savedGame);
-        }
-
-        return gameMapper.toDto(game);
+        return gameMapper.toDtoWithStatus(game, status);
     }
 
     @Override
@@ -125,5 +117,40 @@ public class GameServiceImpl implements GameService {
                 );
             }
         }
+    }
+
+    private UserGame.GameStatus getGameStatus(Long apiId, User user) {
+        if (user == null) {
+            return null;
+        }
+
+        Optional<UserGame> userGameOptional = userGameRepository.findByUserIdAndGameApiId(
+                user.getId(), apiId
+        );
+        return userGameOptional.map(UserGame::getStatus)
+                .orElse(null);
+    }
+
+    private Game findOrUpdate(Long apiId) {
+        Optional<Game> gameOptional = gameRepository.findByApiId(apiId);
+        if (gameOptional.isEmpty()) {
+            return findFromApi(apiId);
+        }
+        Game game = gameOptional.get();
+        if (game.getDescription() == null) {
+            return updateGameDescription(apiId, game);
+        }
+        return game;
+    }
+
+    private Game updateGameDescription(Long apiId, Game game) {
+        ApiResponseFullGameDto apiGame = apiClient.getGameById(apiId);
+        game.setDescription(apiGame.description());
+        return gameRepository.save(game);
+    }
+
+    private Game findFromApi(Long apiId) {
+        ApiResponseFullGameDto apiGame = apiClient.getGameById(apiId);
+        return gameMapper.toModel(apiGame);
     }
 }
