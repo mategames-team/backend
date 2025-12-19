@@ -42,39 +42,40 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Page<CommentDto> getCommentsForGame(Long id, Pageable pageable) {
-        Page<Comment> gameComments = commentRepository.findAllByGameApiId(id, pageable);
+    public Page<CommentDto> getCommentsForGame(Long gameApiId, Pageable pageable) {
+        Page<Comment> gameComments = commentRepository.findAllByGameApiId(gameApiId, pageable);
         return gameComments.map(commentMapper::toDto);
     }
 
     @Override
     public CommentDto update(Long commentId, UpdateCommentRequestDto requestDto, Long userId) {
-        Optional<Comment> commentOptional = commentRepository.findById(commentId);
-        if (commentOptional.isEmpty()) {
-            throw new EntityNotFoundException("There is no comment by id: " + commentId);
-        }
-        Comment comment = commentOptional.get();
-        if (!comment.getUser().getId().equals(userId)) {
-            throw new AccessNotAllowedException("User with id: " + userId
-                    + " is not allowed to modify comment with id: " + commentId);
-        }
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(
+                        () -> new EntityNotFoundException(
+                                "There is no comment by id: " + commentId
+                        )
+                );
+
+        isCreator(comment.getUser().getId(), userId);
+
         if (requestDto.text() != null && !requestDto.text().isBlank()) {
             comment.setText(requestDto.text());
         }
         if (requestDto.rating() != null) {
             comment.setRating(requestDto.rating());
         }
+
         Comment savedComment = commentRepository.save(comment);
         return commentMapper.toDto(savedComment);
     }
 
     @Override
     public void delete(Long commentId, Long userId) {
-        isCreatorOfComment(commentId, userId);
+        existsByIdAndUserId(commentId, userId);
         commentRepository.deleteById(commentId);
     }
 
-    private void isCreatorOfComment(Long commentId, Long userId) {
+    private void existsByIdAndUserId(Long commentId, Long userId) {
         if (!commentRepository.existsByIdAndUserId(commentId, userId)) {
             throw new AccessNotAllowedException("User with id: " + userId
                     + " is not allowed to modify comment with id: " + commentId);
@@ -94,6 +95,13 @@ public class CommentServiceImpl implements CommentService {
             Game game = gameOptional.get();
             comment.setGame(game);
             comment.setGameApiId(game.getApiId());
+        }
+    }
+
+    private void isCreator(Long commentCreatorId, Long userId) {
+        if (!commentCreatorId.equals(userId)) {
+            throw new AccessNotAllowedException("User with id: " + userId
+                    + " is not allowed to modify comment with id: " + commentCreatorId);
         }
     }
 }

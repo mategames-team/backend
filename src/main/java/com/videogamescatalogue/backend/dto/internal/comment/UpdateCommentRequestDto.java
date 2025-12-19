@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Size;
 public record UpdateCommentRequestDto(
         @Size(max = 2000, message = "Comment must be less than 2000 digits")
         String text,
-        @NotNull
         @Min(0)
         @Max(5)
         Integer rating
