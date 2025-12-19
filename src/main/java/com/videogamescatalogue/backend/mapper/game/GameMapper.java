@@ -4,10 +4,12 @@ import com.videogamescatalogue.backend.config.MapperConfig;
 import com.videogamescatalogue.backend.dto.external.ApiResponseFullGameDto;
 import com.videogamescatalogue.backend.dto.external.ApiResponseGameDto;
 import com.videogamescatalogue.backend.dto.internal.game.GameDto;
+import com.videogamescatalogue.backend.dto.internal.game.GameWithStatusDto;
 import com.videogamescatalogue.backend.exception.ParsingException;
 import com.videogamescatalogue.backend.mapper.genre.GenreProvider;
 import com.videogamescatalogue.backend.mapper.platform.PlatformProvider;
 import com.videogamescatalogue.backend.model.Game;
+import com.videogamescatalogue.backend.model.UserGame;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
@@ -38,6 +40,9 @@ public interface GameMapper {
     @Mapping(source = "platforms", target = "platforms", qualifiedByName = "toPlatformDtosSet")
     @Mapping(source = "genres", target = "genres", qualifiedByName = "toGenreDtosSet")
     GameDto toDto(Game game);
+
+    @Mapping(target = "status", source = "status")
+    GameWithStatusDto toDtoWithStatus(Game game, UserGame.GameStatus status);
 
     @Named("toYear")
     default Integer toYear(String releasedDate) {

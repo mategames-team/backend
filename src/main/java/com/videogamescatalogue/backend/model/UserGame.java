@@ -38,8 +38,14 @@ public class UserGame {
 
     @Getter
     public enum GameStatus {
-        BACKLOG,
-        IN_PROGRESS,
-        COMPLETED
+        BACKLOG("Backlog"),
+        IN_PROGRESS("In progress"),
+        COMPLETED("Completed");
+
+        private final String value;
+
+        GameStatus(String value) {
+            this.value = value;
+        }
     }
 }

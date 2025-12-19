@@ -2,8 +2,10 @@ package com.videogamescatalogue.backend.controller;
 
 import com.videogamescatalogue.backend.dto.internal.GameSearchParameters;
 import com.videogamescatalogue.backend.dto.internal.game.GameDto;
+import com.videogamescatalogue.backend.dto.internal.game.GameWithStatusDto;
 import com.videogamescatalogue.backend.model.Genre;
 import com.videogamescatalogue.backend.model.Platform;
+import com.videogamescatalogue.backend.model.User;
 import com.videogamescatalogue.backend.service.game.GameService;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,11 +39,11 @@ public class GameController {
     }
 
     @GetMapping("{gameApiId}")
-    public GameDto getByApiId(
+    public GameWithStatusDto getByApiId(
             @PathVariable Long gameApiId,
-            @PageableDefault(size = DEFAULT_PAGE_SIZE)
-            Pageable pageable) {
-        return gameService.getByApiId(gameApiId);
+            @AuthenticationPrincipal User user
+    ) {
+        return gameService.getByApiId(gameApiId, user);
     }
 
     @GetMapping
