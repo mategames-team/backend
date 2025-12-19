@@ -3,7 +3,9 @@ package com.videogamescatalogue.backend.service.comment;
 import com.videogamescatalogue.backend.dto.external.ApiResponseFullGameDto;
 import com.videogamescatalogue.backend.dto.internal.comment.CommentDto;
 import com.videogamescatalogue.backend.dto.internal.comment.CreateCommentRequestDto;
+import com.videogamescatalogue.backend.dto.internal.comment.UpdateCommentRequestDto;
 import com.videogamescatalogue.backend.exception.AccessNotAllowedException;
+import com.videogamescatalogue.backend.exception.EntityNotFoundException;
 import com.videogamescatalogue.backend.mapper.comment.CommentMapper;
 import com.videogamescatalogue.backend.mapper.game.GameMapper;
 import com.videogamescatalogue.backend.model.Comment;
@@ -46,6 +48,27 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    public CommentDto update(Long commentId, UpdateCommentRequestDto requestDto, Long userId) {
+        Optional<Comment> commentOptional = commentRepository.findById(commentId);
+        if (commentOptional.isEmpty()) {
+            throw new EntityNotFoundException("There is no comment by id: " + commentId);
+        }
+        Comment comment = commentOptional.get();
+        if (!comment.getUser().getId().equals(userId)) {
+            throw new AccessNotAllowedException("User with id: " + userId
+                    + " is not allowed to modify comment with id: " + commentId);
+        }
+        if (requestDto.text() != null && !requestDto.text().isBlank()) {
+            comment.setText(requestDto.text());
+        }
+        if (requestDto.rating() != null) {
+            comment.setRating(requestDto.rating());
+        }
+        Comment savedComment = commentRepository.save(comment);
+        return commentMapper.toDto(savedComment);
+    }
+
+    @Override
     public void delete(Long commentId, Long userId) {
         isCreatorOfComment(commentId, userId);
         commentRepository.deleteById(commentId);
@@ -54,7 +77,7 @@ public class CommentServiceImpl implements CommentService {
     private void isCreatorOfComment(Long commentId, Long userId) {
         if (!commentRepository.existsByIdAndUserId(commentId, userId)) {
             throw new AccessNotAllowedException("User with id: " + userId
-                    + " is not allowed to delete comment with id: " + commentId);
+                    + " is not allowed to modify comment with id: " + commentId);
         }
     }
 
