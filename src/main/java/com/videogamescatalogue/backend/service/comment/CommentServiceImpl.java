@@ -48,6 +48,12 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    public Page<CommentDto> getUserComments(Long userId, Pageable pageable) {
+        Page<Comment> userComments = commentRepository.findAllByUserId(userId, pageable);
+        return userComments.map(commentMapper::toDto);
+    }
+
+    @Override
     public CommentDto update(Long commentId, UpdateCommentRequestDto requestDto, Long userId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(

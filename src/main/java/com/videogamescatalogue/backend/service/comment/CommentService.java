@@ -16,6 +16,8 @@ public interface CommentService {
 
     Page<CommentDto> getCommentsForGame(Long gameApiId, Pageable pageable);
 
+    Page<CommentDto> getUserComments(Long userId, Pageable pageable);
+
     CommentDto update(Long commentId, UpdateCommentRequestDto requestDto, Long userId);
 
     void delete(Long commentId, Long userId);
