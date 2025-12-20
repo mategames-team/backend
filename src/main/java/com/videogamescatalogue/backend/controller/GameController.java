@@ -8,6 +8,7 @@ import com.videogamescatalogue.backend.model.Platform;
 import com.videogamescatalogue.backend.model.User;
 import com.videogamescatalogue.backend.service.game.GameService;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -62,6 +64,13 @@ public class GameController {
     ) {
         validateSearchParams(searchParameters);
         return gameService.search(searchParameters, pageable);
+    }
+
+    @GetMapping("/search")
+    public Page<GameDto> apiSearch(
+            @RequestParam Map<String, String> searchParams
+    ) {
+        return gameService.apiSearch(searchParams);
     }
 
     private void validateSearchParams(GameSearchParameters searchParameters) {

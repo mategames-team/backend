@@ -10,17 +10,21 @@ import com.videogamescatalogue.backend.exception.HttpResponseException;
 import com.videogamescatalogue.backend.exception.ObjectMapperException;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -86,15 +90,7 @@ public class RawgApiClient {
     public Page<ApiResponseGameDto> getAllGames(Pageable pageable) {
         log.info("Called get all games from API");
 
-        String url = BASE_URL + GAME_URL_PART
-                + KEY_URL_PART + apiKey
-                + PAGE_SIZE_URL_PART + pageable.getPageSize()
-                + PAGE_NUMBER_URL_PART + pageable.getPageNumber();
-
-        String ordering = toRawgOrdering(pageable.getSort());
-        if (ordering != null) {
-            url = url + ORDERING_URL_PART + ordering;
-        }
+        String url = getGamesUrlWithPageable(pageable);
 
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .GET()
@@ -123,6 +119,67 @@ public class RawgApiClient {
         log.info("Received response from API");
 
         return game;
+    }
+
+    public Page<ApiResponseGameDto> search(Map<String, String> searchParams) {
+        log.info("Called API search");
+
+        updateSearchParams(searchParams);
+        String url = createUrl(searchParams);
+        HttpRequest httpRequest = HttpRequest.newBuilder()
+                .GET()
+                .uri(URI.create(url.toString()))
+                .header("User-Agent", "VideoGamesCatalogue")
+                .build();
+        ApiResponseGames responseObject = getResponseGamesList(httpRequest);
+
+        log.info("Received response from API");
+
+        Pageable pageable = createPageable(searchParams);
+
+        return new PageImpl<>(responseObject.results(), pageable, responseObject.count());
+    }
+
+    private Pageable createPageable(Map<String, String> searchParams) {
+        int page = Integer.parseInt(searchParams.get("page")) - 1;
+        int pageSize = Integer.parseInt(searchParams.get("page_size"));
+        return PageRequest.of(page, pageSize);
+    }
+
+    private String createUrl(Map<String, String> searchParams) {
+        StringBuilder url = new StringBuilder(BASE_URL + GAME_URL_PART
+                + KEY_URL_PART + apiKey);
+
+        for (Map.Entry<String, String> entry : searchParams.entrySet()) {
+            url.append("&")
+                    .append(entry.getKey())
+                    .append("=")
+                    .append(URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8));
+        }
+
+        return url.toString();
+    }
+
+    private void updateSearchParams(Map<String, String> searchParams) {
+        if (!searchParams.containsKey("page")) {
+            searchParams.put("page", "1");
+        }
+        if (!searchParams.containsKey("page_size")) {
+            searchParams.put("page_size", DEFAULT_PAGE_SIZE);
+        }
+    }
+
+    private String getGamesUrlWithPageable(Pageable pageable) {
+        String url = BASE_URL + GAME_URL_PART
+                + KEY_URL_PART + apiKey
+                + PAGE_SIZE_URL_PART + pageable.getPageSize()
+                + PAGE_NUMBER_URL_PART + pageable.getPageNumber();
+
+        String ordering = toRawgOrdering(pageable.getSort());
+        if (ordering != null) {
+            url = url + ORDERING_URL_PART + ordering;
+        }
+        return url;
     }
 
     private ApiResponseGames getResponseGamesList(HttpRequest httpRequest) {

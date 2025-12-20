@@ -98,6 +98,14 @@ public class GameServiceImpl implements GameService {
                 .map(gameMapper::toDto);
     }
 
+    @Override
+    public Page<GameDto> apiSearch(Map<String, String> searchParams) {
+        Page<ApiResponseGameDto> apiGames = apiClient.search(searchParams);
+
+        return apiGames.map(gameMapper::toModel)
+                .map(gameMapper::toDto);
+    }
+
     private Map<Long, Game> getExistingGamesMap(List<Game> modelList) {
         List<Long> apiIds = modelList.stream()
                 .map(Game::getApiId)
