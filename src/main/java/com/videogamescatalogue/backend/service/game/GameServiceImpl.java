@@ -20,13 +20,13 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-@Slf4j
+@Log4j2
 @RequiredArgsConstructor
 @Service
 public class GameServiceImpl implements GameService {
@@ -59,13 +59,19 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void fetchAndUpdateBestGames() {
+        log.info("fetchAndUpdateBestGames is called");
+
         List<ApiResponseGameDto> apiGames = apiClient.getBestGames();
+        log.info("Received list of games from Api. List size={}",
+                apiGames.size());
+
         List<Game> modelList = gameMapper.toModelList(apiGames);
 
         Map<Long, Game> existingGamesMap = getExistingGamesMap(modelList);
         setIdIfExistingGame(modelList, existingGamesMap);
 
         gameRepository.saveAll(modelList);
+        log.info("Saved and updated games");
     }
 
     @Override
