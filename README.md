@@ -59,6 +59,8 @@ https://git-scm.com/
     ```bash
    mvn spring-boot:run
    ```
+To test endpoints use Swagger documentation by link (when running the app locally):
+http://localhost:8080/api/swagger-ui/index.html
 
 ## API Endpoint Details. 
 ## GameController
