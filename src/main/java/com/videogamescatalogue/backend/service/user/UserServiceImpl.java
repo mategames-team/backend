@@ -57,16 +57,8 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto changePassword(
             ChangePasswordRequestDto requestDto, User authenticatedUser
     ) {
-        if (!passwordEncoder.matches(
-                        requestDto.currentPassword(),
-                        authenticatedUser.getPassword()
-        )) {
-            throw new InvalidInputException("Current password is not valid.");
-        }
-
-        if (!requestDto.newPassword().equals(requestDto.repeatPassword())) {
-            throw new InvalidInputException("New password and repeat password must match");
-        }
+        validateCurrentPassword(requestDto, authenticatedUser);
+        checkPasswordsMatch(requestDto);
 
         authenticatedUser.setPassword(passwordEncoder.encode(requestDto.newPassword()));
         User savedUser = userRepository.save(authenticatedUser);
@@ -74,6 +66,23 @@ public class UserServiceImpl implements UserService {
         log.info("User with id={} changed password.", authenticatedUser.getId());
 
         return userMapper.toDto(savedUser);
+    }
+
+    private void checkPasswordsMatch(ChangePasswordRequestDto requestDto) {
+        if (!requestDto.newPassword().equals(requestDto.repeatPassword())) {
+            throw new InvalidInputException("New password and repeat password must match");
+        }
+    }
+
+    private void validateCurrentPassword(
+            ChangePasswordRequestDto requestDto, User authenticatedUser
+    ) {
+        if (!passwordEncoder.matches(
+                requestDto.currentPassword(),
+                authenticatedUser.getPassword()
+        )) {
+            throw new InvalidInputException("Current password is not valid.");
+        }
     }
 
     private void checkUserCanAccess(Long userId, User authenticatedUser) {
