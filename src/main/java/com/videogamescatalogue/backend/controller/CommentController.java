@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping
 @RestController
 public class CommentController {
+    private static final int DEFAULT_PAGE_SIZE = 30;
     private final CommentService commentService;
 
     @PostMapping("/comments/games/{gameApiId}")
@@ -38,8 +40,21 @@ public class CommentController {
     }
 
     @GetMapping("/games/{gameApiId}/comments")
-    public Page<CommentDto> getCommentsForGame(@PathVariable Long gameApiId, Pageable pageable) {
+    public Page<CommentDto> getCommentsForGame(
+            @PathVariable Long gameApiId,
+            @PageableDefault(size = DEFAULT_PAGE_SIZE)
+            Pageable pageable
+    ) {
         return commentService.getCommentsForGame(gameApiId, pageable);
+    }
+
+    @GetMapping("/comments")
+    public Page<CommentDto> getUserComments(
+            @AuthenticationPrincipal User user,
+            @PageableDefault(size = DEFAULT_PAGE_SIZE)
+            Pageable pageable
+    ) {
+        return commentService.getUserComments(user.getId(), pageable);
     }
 
     @PatchMapping("/comments/{commentId}")
