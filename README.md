@@ -59,8 +59,52 @@ https://git-scm.com/
     ```bash
    mvn spring-boot:run
    ```
-To test endpoints use Swagger documentation by link (when running the app locally):
+## Swagger documentation
+To test endpoints use Swagger documentation by link (when running the app locally, instructions below):
 http://localhost:8080/api/swagger-ui/index.html
+### How to Use the API Documentation (Swagger UI)
+This API uses JWT authentication.
+To access protected endpoints, you must register, log in, and authorise Swagger with your token.
+
+1️⃣ Register a New User
+- Open Swagger UI
+- Find the Authentication section
+- Click POST /auth/register
+- Click “Try it out”
+- Fill in the request body
+- Click Execute 
+✅ If registration is successful, the user is created.
+
+2️⃣ Log In and Get JWT Token
+- In the Authentication section
+- Open POST /auth/login
+- Click “Try it out”
+- Enter your credentials
+- Click Execute
+📌 The response will contain a JWT token, for example:
+{
+"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+👉 Copy this token
+
+3️⃣ Authorise Swagger with JWT Token
+- At the top-right corner of Swagger UI, click the 🔒 Authorize button
+- In the popup window:
+- Paste your token in this format:
+- Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+⚠️ Important: The word Bearer and a space must be included
+- Click Authorize
+- Click Close
+✅ Swagger is now authorised
+
+4️⃣ Call Protected Endpoints
+Once authorised, you can access endpoints that require authentication.
+📌 Swagger will now automatically attach the JWT token to each authorised request.
+
+5️⃣ Logging Out / Token Expiry
+If you refresh the page or your token expires:
+- Click 🔒 Authorize again
+- Paste a new token
 
 ## API Endpoint Details. 
 ## GameController
