@@ -63,6 +63,7 @@ https://git-scm.com/
 To test endpoints use Swagger documentation by link (when running the app locally, instructions below):
 http://localhost:8080/api/swagger-ui/index.html
 ### How to Use the API Documentation (Swagger UI)
+Important! To run manual update of the database using AdminGameController endpoints, you need to log in as ADMIN. 
 This API uses JWT authentication.
 To access protected endpoints, you must register, log in, and authorise Swagger with your token.
 
