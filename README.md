@@ -186,7 +186,7 @@ _ Description: Authenticates a user and returns JWT token.
 
 ## UserController
 ### getUserInfo
-- Description: Returns user information by user ID. Access is restricted based on the authenticated user.
+- Description: Returns user information by user ID. Any authenticated user can see other user's profile info.
 - URL: http://localhost:8080/api/users/{id}
 - Method: GET
 - Authentication: Required
@@ -217,7 +217,7 @@ _ Description: Authenticates a user and returns JWT token.
 - Authentication: Required
 
 ### getUserGamesByStatus
-- Description: Returns a paginated list of the authenticated user’s games filtered by status.
+- Description: Returns a paginated list of any user’s games filtered by status.
 - URL: http://localhost:8080/api/user-games
 - Method: GET
 - Authentication: Required
