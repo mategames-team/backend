@@ -4,7 +4,7 @@ import com.videogamescatalogue.backend.dto.internal.user.ChangePasswordRequestDt
 import com.videogamescatalogue.backend.dto.internal.user.UpdateUserRequestDto;
 import com.videogamescatalogue.backend.dto.internal.user.UserRegistrationRequestDto;
 import com.videogamescatalogue.backend.dto.internal.user.UserResponseDto;
-import com.videogamescatalogue.backend.exception.AccessNotAllowedException;
+import com.videogamescatalogue.backend.exception.EntityNotFoundException;
 import com.videogamescatalogue.backend.exception.InvalidInputException;
 import com.videogamescatalogue.backend.exception.RegistrationException;
 import com.videogamescatalogue.backend.mapper.user.UserMapper;
@@ -39,8 +39,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto getUserInfo(Long userId, User authenticatedUser) {
-        checkUserCanAccess(userId, authenticatedUser);
-        return userMapper.toDto(authenticatedUser);
+        if (authenticatedUser.getId().equals(userId)) {
+            return userMapper.toDto(authenticatedUser);
+        }
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new EntityNotFoundException(
+                        "There is no user by id: " + userId
+                )
+        );
+        return userMapper.toDto(user);
     }
 
     @Override
@@ -82,13 +89,6 @@ public class UserServiceImpl implements UserService {
                 authenticatedUser.getPassword()
         )) {
             throw new InvalidInputException("Current password is not valid.");
-        }
-    }
-
-    private void checkUserCanAccess(Long userId, User authenticatedUser) {
-        if (!userId.equals(authenticatedUser.getId())) {
-            throw new AccessNotAllowedException("User with id: " + authenticatedUser.getId()
-            + " is not allowed to access info of user with id: " + userId);
         }
     }
 
