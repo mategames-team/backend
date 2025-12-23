@@ -63,6 +63,7 @@ https://git-scm.com/
 To test endpoints use Swagger documentation by link (when running the app locally, instructions below):
 http://localhost:8080/api/swagger-ui/index.html
 ### How to Use the API Documentation (Swagger UI)
+Important! To run manual update of the database using AdminGameController endpoints, you need to log in as ADMIN. 
 This API uses JWT authentication.
 To access protected endpoints, you must register, log in, and authorise Swagger with your token.
 
@@ -220,3 +221,34 @@ _ Description: Authenticates a user and returns JWT token.
 - URL: http://localhost:8080/api/user-games
 - Method: GET
 - Authentication: Required
+
+## AdminGameController
+Provides administrative endpoints for managing game data fetched from an external API. These endpoints are intended only for administrators and are protected by role-based security.
+
+### fetchBestGamesManually
+- Description: Fetches the current list of best games from the external API and saves only games that do not already exist in the database.
+- URL: http://localhost:8080/api/admin/fetch-best-games
+- Method: POST
+- Authentication: Required
+
+### fetchAndUpdateAllGamesManually
+- Description: Fetches the best games from the external API and updates existing records, while also saving any newly discovered games.
+- URL: http://localhost:8080/api/admin/fetch-update-best-games
+- Method: POST
+- Authentication: Required
+
+## Automatic Game Fetch on Application Startup
+The application is configured to automatically fetch best games from the external API when the backend starts.
+# How It Works
+- The main Spring Boot application class implements CommandLineRunner
+- On startup, Spring executes the run() method
+- This triggers an automatic call to gameService
+- As a result, the application ensures that the database is initially populated with best games without requiring any manual admin action.
+
+## Scheduled Daily Game Fetch
+The application includes a scheduled task that automatically fetches best games once per day.
+- Time: Every day at 06:00 AM
+- Time zone: Europe/Kyiv
+- Trigger mechanism: Spring’s @Scheduled with a cron expression
+- The scheduler runs automatically without any manual intervention
+- Only new games are saved

@@ -1,21 +1,31 @@
 databaseChangeLog:
   - include:
-      file: classpath:/db/changelog/changes/01-create-platforms-table.yaml
+      file: classpath:/db/changelog/changes/01-create-roles-table.yaml
   - include:
-      file: classpath:/db/changelog/changes/02-insert-default-platforms.yaml
+      file: classpath:/db/changelog/changes/02-insert-into-roles-table.yaml
   - include:
-      file: classpath:/db/changelog/changes/03-create-genres-table.yaml
+      file: classpath:/db/changelog/changes/03-create-users-table.yaml
   - include:
-      file: classpath:/db/changelog/changes/04-insert-default-genres.yaml
+      file: classpath:/db/changelog/changes/04-insert-into-users-table.yaml
   - include:
-      file: classpath:/db/changelog/changes/05-create-games-table.yaml
+      file: classpath:/db/changelog/changes/05-create-users-roles-table.yaml
   - include:
-      file: classpath:/db/changelog/changes/06-create-games-platforms-table.yaml
+      file: classpath:/db/changelog/changes/06-insert-into-users-roles-table.yaml
   - include:
-      file: classpath:/db/changelog/changes/07-create-games-genres-table.yaml
+      file: classpath:/db/changelog/changes/07-create-platforms-table.yaml
   - include:
-      file: classpath:/db/changelog/changes/08-create-users-table.yaml
+      file: classpath:/db/changelog/changes/08-insert-default-platforms.yaml
   - include:
-      file: classpath:/db/changelog/changes/09-create-user-game-table.yaml
+      file: classpath:/db/changelog/changes/09-create-genres-table.yaml
   - include:
-      file: classpath:/db/changelog/changes/10-create-comments-table.yaml
+      file: classpath:/db/changelog/changes/10-insert-default-genres.yaml
+  - include:
+      file: classpath:/db/changelog/changes/11-create-games-table.yaml
+  - include:
+      file: classpath:/db/changelog/changes/12-create-games-platforms-table.yaml
+  - include:
+      file: classpath:/db/changelog/changes/13-create-games-genres-table.yaml
+  - include:
+      file: classpath:/db/changelog/changes/14-create-user-game-table.yaml
+  - include:
+      file: classpath:/db/changelog/changes/15-create-comments-table.yaml

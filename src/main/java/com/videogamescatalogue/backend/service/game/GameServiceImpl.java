@@ -38,6 +38,8 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void fetchBestGames() {
+        log.info("fetchBestGames is called");
+
         List<ApiResponseGameDto> apiGames = apiClient.getBestGames();
         log.info("Received list of games from Api. List size={}",
                 apiGames.size());
@@ -72,6 +74,11 @@ public class GameServiceImpl implements GameService {
 
         gameRepository.saveAll(modelList);
         log.info("Saved and updated games");
+    }
+
+    @Override
+    public void updateDbGames() {
+
     }
 
     @Override
