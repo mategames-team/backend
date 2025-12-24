@@ -224,6 +224,7 @@ _ Description: Authenticates a user and returns JWT token.
 
 ## AdminGameController
 Provides administrative endpoints for managing game data fetched from an external API. These endpoints are intended only for administrators and are protected by role-based security.
+Important! To run manual update of the database using AdminGameController endpoints, you need to log in as ADMIN.
 
 ### fetchBestGamesManually
 - Description: Fetches the current list of best games from the external API and saves only games that do not already exist in the database.

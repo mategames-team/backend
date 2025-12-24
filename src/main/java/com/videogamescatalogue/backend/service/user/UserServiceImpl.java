@@ -8,8 +8,11 @@ import com.videogamescatalogue.backend.exception.EntityNotFoundException;
 import com.videogamescatalogue.backend.exception.InvalidInputException;
 import com.videogamescatalogue.backend.exception.RegistrationException;
 import com.videogamescatalogue.backend.mapper.user.UserMapper;
+import com.videogamescatalogue.backend.model.Role;
 import com.videogamescatalogue.backend.model.User;
+import com.videogamescatalogue.backend.repository.RoleRepository;
 import com.videogamescatalogue.backend.repository.UserRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +25,16 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
+    private Role roleUser;
+
+    @PostConstruct
+    private void init() {
+        roleUser = roleRepository.findByRole(Role.RoleName.ROLE_USER)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Can't find role by name: " + Role.RoleName.ROLE_USER.name())
+                );
+    }
 
     @Override
     public UserResponseDto registerUser(UserRegistrationRequestDto requestDto) {
@@ -29,6 +42,7 @@ public class UserServiceImpl implements UserService {
 
         User user = userMapper.toModel(requestDto);
         user.setPassword(passwordEncoder.encode(requestDto.password()));
+        user.getRoles().add(roleUser);
 
         User savedUser = userRepository.save(user);
 
