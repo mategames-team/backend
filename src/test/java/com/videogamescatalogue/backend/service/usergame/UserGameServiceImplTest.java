@@ -8,6 +8,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import com.videogamescatalogue.backend.dto.internal.game.GameDto;
+import com.videogamescatalogue.backend.dto.internal.genre.GenreDto;
+import com.videogamescatalogue.backend.dto.internal.platform.PlatformDto;
 import com.videogamescatalogue.backend.dto.internal.usergame.CreateUserGameDto;
 import com.videogamescatalogue.backend.dto.internal.usergame.UserGameDto;
 import com.videogamescatalogue.backend.mapper.usergame.UserGameMapper;
@@ -17,7 +20,9 @@ import com.videogamescatalogue.backend.model.User;
 import com.videogamescatalogue.backend.model.UserGame;
 import com.videogamescatalogue.backend.repository.GameRepository;
 import com.videogamescatalogue.backend.repository.UserGameRepository;
+import java.math.BigDecimal;
 import java.util.Optional;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,6 +45,9 @@ class UserGameServiceImplTest {
     private User user;
     private UserGame userGame;
     private UserGameDto userGameDto;
+    private GameDto gameDto;
+    private PlatformDto platformDto;
+    private GenreDto genreDto;
 
     @BeforeEach
     void setUp() {
@@ -65,8 +73,21 @@ class UserGameServiceImplTest {
         userGame.setGame(new Game());
         userGame.setStatus(UserGame.GameStatus.BACKLOG);
 
+        platformDto = new PlatformDto("PC");
+
+        genreDto = new GenreDto("Action");
+
+        gameDto = new GameDto(
+               1234L, "Game name",
+                2016, "link",
+                Set.of(platformDto),
+                Set.of(genreDto),
+                BigDecimal.valueOf(4.8),
+                "description"
+        );
+
         userGameDto = new UserGameDto(
-                1L, 10L, 1L, 100L,
+                1L, 10L, gameDto,
                 UserGame.GameStatus.BACKLOG.getValue()
         );
     }
