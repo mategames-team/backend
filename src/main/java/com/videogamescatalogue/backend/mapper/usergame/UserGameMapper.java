@@ -6,11 +6,10 @@ import com.videogamescatalogue.backend.model.UserGame;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(config = MapperConfig.class)
+@Mapper(config = MapperConfig.class, uses = GameProvider.class)
 public interface UserGameMapper {
     @Mapping(source = "user.id", target = "userId")
-    @Mapping(source = "game.id", target = "gameId")
-    @Mapping(source = "game.apiId", target = "gameApiId")
+    @Mapping(source = "game", target = "gameDto", qualifiedByName = "toGameDto")
     UserGameDto toDto(UserGame userGame);
 
 }
