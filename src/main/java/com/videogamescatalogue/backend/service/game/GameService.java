@@ -13,8 +13,6 @@ public interface GameService {
 
     void fetchAndUpdateBestGames();
 
-    void updateDbGames();
-
     Page<GameDto> getAllGamesFromDb(Pageable pageable);
 
     GameWithStatusDto getByApiId(Long id, User user);

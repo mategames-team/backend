@@ -77,11 +77,6 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void updateDbGames() {
-
-    }
-
-    @Override
     public Page<GameDto> getAllGamesFromDb(Pageable pageable) {
         return gameRepository.findAll(pageable)
                 .map(gameMapper::toDto);
