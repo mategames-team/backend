@@ -10,7 +10,6 @@ import static org.mockito.Mockito.when;
 
 import com.videogamescatalogue.backend.dto.internal.usergame.CreateUserGameDto;
 import com.videogamescatalogue.backend.dto.internal.usergame.UserGameDto;
-import com.videogamescatalogue.backend.mapper.game.GameMapper;
 import com.videogamescatalogue.backend.mapper.usergame.UserGameMapper;
 import com.videogamescatalogue.backend.model.Game;
 import com.videogamescatalogue.backend.model.Role;
@@ -18,7 +17,6 @@ import com.videogamescatalogue.backend.model.User;
 import com.videogamescatalogue.backend.model.UserGame;
 import com.videogamescatalogue.backend.repository.GameRepository;
 import com.videogamescatalogue.backend.repository.UserGameRepository;
-import com.videogamescatalogue.backend.service.RawgApiClient;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
