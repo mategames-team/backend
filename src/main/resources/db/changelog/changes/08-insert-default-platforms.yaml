@@ -1,7 +1,12 @@
 databaseChangeLog:
   - changeSet:
-      id: insert-default-platforms
-      author: Yuliia
+      id: insert-default-platforms-1
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM platforms WHERE general_name='PC'
       changes:
         - insert:
             tableName: platforms
@@ -10,6 +15,15 @@ databaseChangeLog:
                   name: general_name
                   value: "PC"
 
+  - changeSet:
+      id: insert-default-platforms-2
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM platforms WHERE general_name='PLAYSTATION'
+      changes:
         - insert:
             tableName: platforms
             columns:
@@ -17,6 +31,15 @@ databaseChangeLog:
                   name: general_name
                   value: "PLAYSTATION"
 
+  - changeSet:
+      id: insert-default-platforms-3
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM platforms WHERE general_name='XBOX'
+      changes:
         - insert:
             tableName: platforms
             columns:
@@ -24,6 +47,15 @@ databaseChangeLog:
                   name: general_name
                   value: "XBOX"
 
+  - changeSet:
+      id: insert-default-platforms-4
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM platforms WHERE general_name='NINTENDO_SWITCH'
+      changes:
         - insert:
             tableName: platforms
             columns:
@@ -31,6 +63,15 @@ databaseChangeLog:
                   name: general_name
                   value: "NINTENDO_SWITCH"
 
+  - changeSet:
+      id: insert-default-platforms-5
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM platforms WHERE general_name='MOBILE'
+      changes:
         - insert:
             tableName: platforms
             columns:
@@ -38,6 +79,15 @@ databaseChangeLog:
                   name: general_name
                   value: "MOBILE"
 
+  - changeSet:
+      id: insert-default-platforms-6
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM platforms WHERE general_name='MAC'
+      changes:
         - insert:
             tableName: platforms
             columns:
@@ -45,6 +95,15 @@ databaseChangeLog:
                   name: general_name
                   value: "MAC"
 
+  - changeSet:
+      id: insert-default-platforms-7
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM platforms WHERE general_name='LINUX'
+      changes:
         - insert:
             tableName: platforms
             columns:
@@ -52,6 +111,15 @@ databaseChangeLog:
                   name: general_name
                   value: "LINUX"
 
+  - changeSet:
+      id: insert-default-platforms-8
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM platforms WHERE general_name='SEGA'
+      changes:
         - insert:
             tableName: platforms
             columns:
@@ -59,6 +127,15 @@ databaseChangeLog:
                   name: general_name
                   value: "SEGA"
 
+  - changeSet:
+      id: insert-default-platforms-9
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM platforms WHERE general_name='ATARI'
+      changes:
         - insert:
             tableName: platforms
             columns:
@@ -66,6 +143,15 @@ databaseChangeLog:
                   name: general_name
                   value: "ATARI"
 
+  - changeSet:
+      id: insert-default-platforms-10
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM platforms WHERE general_name='CLASSIC_CONSOLE'
+      changes:
         - insert:
             tableName: platforms
             columns:
@@ -73,6 +159,15 @@ databaseChangeLog:
                   name: general_name
                   value: "CLASSIC_CONSOLE"
 
+  - changeSet:
+      id: insert-default-platforms-11
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM platforms WHERE general_name='UNKNOWN'
+      changes:
         - insert:
             tableName: platforms
             columns:

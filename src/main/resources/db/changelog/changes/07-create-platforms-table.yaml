@@ -1,7 +1,12 @@
 databaseChangeLog:
   - changeSet:
       id: create-platforms-table
-      author: Yuliia
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+          - tableExists:
+              tableName: platforms
       changes:
         - createTable:
             tableName: platforms

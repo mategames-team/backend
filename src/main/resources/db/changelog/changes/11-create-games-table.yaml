@@ -1,7 +1,12 @@
 databaseChangeLog:
   - changeSet:
       id: create-games-table
-      author: Yuliia
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+          - tableExists:
+              tableName: games
       changes:
         - createTable:
             tableName: games

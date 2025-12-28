@@ -2,6 +2,11 @@ databaseChangeLog:
   - changeSet:
       id: insert-users
       author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM users WHERE email='admin@gmail.com'
       changes:
         - insert:
             tableName: users
