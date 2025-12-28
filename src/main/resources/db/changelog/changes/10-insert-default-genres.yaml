@@ -1,7 +1,12 @@
 databaseChangeLog:
   - changeSet:
-      id: insert-default-genres
-      author: Yuliia
+      id: insert-default-genres-1
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM genres WHERE name='ACTION'
       changes:
         - insert:
             tableName: genres
@@ -10,6 +15,15 @@ databaseChangeLog:
                   name: name
                   value: "ACTION"
 
+  - changeSet:
+      id: insert-default-genres-2
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM genres WHERE name='INDIE'
+      changes:
         - insert:
             tableName: genres
             columns:
@@ -17,6 +31,15 @@ databaseChangeLog:
                   name: name
                   value: "INDIE"
 
+  - changeSet:
+      id: insert-default-genres-3
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM genres WHERE name='ADVENTURE'
+      changes:
         - insert:
             tableName: genres
             columns:
@@ -24,6 +47,15 @@ databaseChangeLog:
                   name: name
                   value: "ADVENTURE"
 
+  - changeSet:
+      id: insert-default-genres-4
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM genres WHERE name='RPG'
+      changes:
         - insert:
             tableName: genres
             columns:
@@ -31,6 +63,15 @@ databaseChangeLog:
                   name: name
                   value: "RPG"
 
+  - changeSet:
+      id: insert-default-genres-5
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM genres WHERE name='STRATEGY'
+      changes:
         - insert:
             tableName: genres
             columns:
@@ -38,6 +79,15 @@ databaseChangeLog:
                   name: name
                   value: "STRATEGY"
 
+  - changeSet:
+      id: insert-default-genres-6
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM genres WHERE name='SHOOTER'
+      changes:
         - insert:
             tableName: genres
             columns:
@@ -45,6 +95,15 @@ databaseChangeLog:
                   name: name
                   value: "SHOOTER"
 
+  - changeSet:
+      id: insert-default-genres-7
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM genres WHERE name='CASUAL'
+      changes:
         - insert:
             tableName: genres
             columns:
@@ -52,6 +111,15 @@ databaseChangeLog:
                   name: name
                   value: "CASUAL"
 
+  - changeSet:
+      id: insert-default-genres-8
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM genres WHERE name='SIMULATION'
+      changes:
         - insert:
             tableName: genres
             columns:
@@ -59,6 +127,15 @@ databaseChangeLog:
                   name: name
                   value: "SIMULATION"
 
+  - changeSet:
+      id: insert-default-genres-9
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM genres WHERE name='PUZZLE'
+      changes:
         - insert:
             tableName: genres
             columns:
@@ -66,6 +143,15 @@ databaseChangeLog:
                   name: name
                   value: "PUZZLE"
 
+  - changeSet:
+      id: insert-default-genres-10
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM genres WHERE name='ARCADE'
+      changes:
         - insert:
             tableName: genres
             columns:
@@ -73,6 +159,15 @@ databaseChangeLog:
                   name: name
                   value: "ARCADE"
 
+  - changeSet:
+      id: insert-default-genres-11
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM genres WHERE name='PLATFORMER'
+      changes:
         - insert:
             tableName: genres
             columns:
@@ -80,6 +175,15 @@ databaseChangeLog:
                   name: name
                   value: "PLATFORMER"
 
+  - changeSet:
+      id: insert-default-genres-12
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM genres WHERE name='MASS_MULTIPLAYER'
+      changes:
         - insert:
             tableName: genres
             columns:
@@ -87,6 +191,15 @@ databaseChangeLog:
                   name: name
                   value: "MASS_MULTIPLAYER"
 
+  - changeSet:
+      id: insert-default-genres-13
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM genres WHERE name='RACING'
+      changes:
         - insert:
             tableName: genres
             columns:
@@ -94,6 +207,15 @@ databaseChangeLog:
                   name: name
                   value: "RACING"
 
+  - changeSet:
+      id: insert-default-genres-14
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM genres WHERE name='SPORTS'
+      changes:
         - insert:
             tableName: genres
             columns:
@@ -101,6 +223,15 @@ databaseChangeLog:
                   name: name
                   value: "SPORTS"
 
+  - changeSet:
+      id: insert-default-genres-15
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM genres WHERE name='FIGHTING'
+      changes:
         - insert:
             tableName: genres
             columns:
@@ -108,6 +239,15 @@ databaseChangeLog:
                   name: name
                   value: "FIGHTING"
 
+  - changeSet:
+      id: insert-default-genres-16
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM genres WHERE name='FAMILY'
+      changes:
         - insert:
             tableName: genres
             columns:
@@ -115,6 +255,15 @@ databaseChangeLog:
                   name: name
                   value: "FAMILY"
 
+  - changeSet:
+      id: insert-default-genres-17
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM genres WHERE name='BOARD'
+      changes:
         - insert:
             tableName: genres
             columns:
@@ -122,6 +271,15 @@ databaseChangeLog:
                   name: name
                   value: "BOARD"
 
+  - changeSet:
+      id: insert-default-genres-18
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM genres WHERE name='CARD'
+      changes:
         - insert:
             tableName: genres
             columns:
@@ -129,6 +287,15 @@ databaseChangeLog:
                   name: name
                   value: "CARD"
 
+  - changeSet:
+      id: insert-default-genres-19
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM genres WHERE name='EDUCATIONAL'
+      changes:
         - insert:
             tableName: genres
             columns:
@@ -136,6 +303,15 @@ databaseChangeLog:
                   name: name
                   value: "EDUCATIONAL"
 
+  - changeSet:
+      id: insert-default-genres-20
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM genres WHERE name='UNKNOWN'
+      changes:
         - insert:
             tableName: genres
             columns:

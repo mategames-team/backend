@@ -1,7 +1,12 @@
 databaseChangeLog:
   - changeSet:
       id: create-games-genres-table
-      author: Yuliia
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+          - tableExists:
+              tableName: games_genres
       changes:
         - createTable:
             tableName: games_genres

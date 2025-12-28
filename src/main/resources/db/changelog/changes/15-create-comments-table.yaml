@@ -1,7 +1,12 @@
 databaseChangeLog:
   - changeSet:
       id: create-comments-table
-      author: Yuliia
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+          - tableExists:
+              tableName: comments
       changes:
         - createTable:
             tableName: comments

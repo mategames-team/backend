@@ -1,10 +1,16 @@
 databaseChangeLog:
   - changeSet:
       id: create-users-table
-      author: Yuliia
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+          - tableExists:
+              tableName: users
       changes:
         - createTable:
             tableName: users
+            ifNotExists: true
             columns:
               - column:
                   name: id
