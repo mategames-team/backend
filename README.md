@@ -186,9 +186,11 @@ _ Description: Authenticates a user and returns JWT token.
 
 ## UserController
 ### getUserInfo
-- Description: Returns user information by user ID. Any authenticated user can see other user's profile info.
-- URL: http://localhost:8080/api/users/{id}
-- Method: GET
+- Description: Returns user information. If id is provided, returns info by id.
+  If id is not provided, returns info about authenticated user. Any authenticated user can see other user's profile info.
+- URL: http://localhost:8080/api/users/info
+- Method: GET 
+- @RequestParam(required = false) Long id
 - Authentication: Required
 
 ### updateUserInfo
