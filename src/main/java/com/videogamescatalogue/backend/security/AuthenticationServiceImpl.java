@@ -2,6 +2,7 @@ package com.videogamescatalogue.backend.security;
 
 import com.videogamescatalogue.backend.dto.internal.user.UserLoginRequestDto;
 import com.videogamescatalogue.backend.dto.internal.user.UserLoginResponseDto;
+import com.videogamescatalogue.backend.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,6 +22,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         requestDto.email(), requestDto.password())
         );
         String token = jwtUtil.generateToken(authentication.getName());
-        return new UserLoginResponseDto(token);
+        User user = (User) authentication.getPrincipal();
+        Long userId = user.getId();
+        return new UserLoginResponseDto(token, userId);
     }
 }

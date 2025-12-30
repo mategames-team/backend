@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDto getUserInfo(Long userId, User authenticatedUser) {
+    public UserResponseDto getUserInfoById(Long userId, User authenticatedUser) {
         if (authenticatedUser.getId().equals(userId)) {
             return userMapper.toDto(authenticatedUser);
         }
@@ -62,6 +62,11 @@ public class UserServiceImpl implements UserService {
                 )
         );
         return userMapper.toDto(user);
+    }
+
+    @Override
+    public UserResponseDto getAuthenticatedUserInfo(User authenticatedUser) {
+        return userMapper.toDto(authenticatedUser);
     }
 
     @Override

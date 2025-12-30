@@ -15,9 +15,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Users", description = "Operations related to user profiles and accounts")
@@ -28,8 +28,13 @@ public class UserController {
     private final UserService userService;
 
     @Operation(
-            summary = "Get user information by ID",
-            description = " Returns user profile information. Requires authentication"
+            summary = "Get user information",
+            description = """
+                    Returns user profile information. 
+                    If id is provided, returns info by id.
+                    If id is not provided, returns info about authenticated user.
+                    Requires authentication
+                    """
     )
     @ApiResponse(
             responseCode = "200",
@@ -48,12 +53,15 @@ public class UserController {
             description = "User not found",
             content = @Content
     )
-    @GetMapping("/{id}")
+    @GetMapping("/info")
     public UserResponseDto getUserInfo(
-            @PathVariable Long id,
+            @RequestParam(required = false) Long id,
             @AuthenticationPrincipal User user
     ) {
-        return userService.getUserInfo(id, user);
+        if (id == null) {
+            return userService.getAuthenticatedUserInfo(user);
+        }
+        return userService.getUserInfoById(id, user);
     }
 
     @Operation(
