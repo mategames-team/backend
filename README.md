@@ -1,4 +1,24 @@
 # VideoGames Catalogue Backend
+VideoGames Catalogue Backend is a Spring Boot application that provides a REST API for fetching, managing, and commenting on video games.
+It integrates with an external game API to populate the database automatically and supports role-based access for administrators and users.
+This backend is designed to support a frontend application or mobile app for video game enthusiasts.
+
+## Table of Contents
+- [Key Features](#key-features)
+- [Running the backend locally](#running-the-backend-locally)
+- [Swagger documentation](#swagger-documentation)
+- [API Endpoint Details](#api-endpoint-details)
+- [Automatic Game Fetch on Application Startup](#automatic-game-fetch-on-application-startup)
+- [Scheduled Daily Game Fetch](#scheduled-daily-game-fetch)
+- [Postman](#postman)
+
+## Key Features
+- JWT-based authentication and authorization
+- User profile management
+- Commenting for games
+- Integration with an external games API
+- Admin endpoints for managing game data
+- Automatic and scheduled game fetching
 
 ## Running the backend locally
 1. Before running the backend, make sure the following tools are installed:
@@ -54,7 +74,7 @@ https://git-scm.com/
    cd backend
    git checkout dev
    ```
-   
+
 3. Build and run the project using Maven:
     ```bash
    mvn spring-boot:run
@@ -63,7 +83,7 @@ https://git-scm.com/
 To test endpoints use Swagger documentation by link (when running the app locally, instructions below):
 http://localhost:8080/api/swagger-ui/index.html
 ### How to Use the API Documentation (Swagger UI)
-Important! To run manual update of the database using AdminGameController endpoints, you need to log in as ADMIN. 
+Important! To run manual update of the database using AdminGameController endpoints, you need to log in as ADMIN.
 This API uses JWT authentication.
 To access protected endpoints, you must register, log in, and authorise Swagger with your token.
 
@@ -73,8 +93,8 @@ To access protected endpoints, you must register, log in, and authorise Swagger 
 - Click POST /auth/register
 - Click “Try it out”
 - Fill in the request body
-- Click Execute 
-✅ If registration is successful, the user is created.
+- Click Execute
+  ✅ If registration is successful, the user is created.
 
 2️⃣ Log In and Get JWT Token
 - In the Authentication section
@@ -82,21 +102,21 @@ To access protected endpoints, you must register, log in, and authorise Swagger 
 - Click “Try it out”
 - Enter your credentials
 - Click Execute
-📌 The response will contain a JWT token, for example:
-{
-"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-}
-👉 Copy this token
+  📌 The response will contain a JWT token, for example:
+  {
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  }
+  👉 Copy this token
 
 3️⃣ Authorise Swagger with JWT Token
 - At the top-right corner of Swagger UI, click the 🔒 Authorize button
 - In the popup window:
 - Paste your token in this format:
 - Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-⚠️ Important: The word Bearer and a space must be included
+  ⚠️ Important: The word Bearer and a space must be included
 - Click Authorize
 - Click Close
-✅ Swagger is now authorised
+  ✅ Swagger is now authorised
 
 4️⃣ Call Protected Endpoints
 Once authorised, you can access endpoints that require authentication.
@@ -107,19 +127,19 @@ If you refresh the page or your token expires:
 - Click 🔒 Authorize again
 - Paste a new token
 
-## API Endpoint Details. 
+## API Endpoint Details.
 ## GameController
 
 ### getAllGamesFromDb
 - Description: Returns a page of games from DB.
-- URL: `http://localhost:8080/api/games/local`
+- URL: http://localhost:8080/api/games/local
 - Method: GET
 - Authentication: Not required
 
 ### getByApiId
 
 - Description: Returns a game from db by its apiId if the game is in db. Fetches the game from API if there is no game by the provided apiId.
-- URL: `http://localhost:8080/api/games/{gameApiId}`
+- URL: http://localhost:8080/api/games/{gameApiId}
 - Method: GET
 - Authentication: Not required
 
@@ -189,7 +209,7 @@ _ Description: Authenticates a user and returns JWT token.
 - Description: Returns user information. If id is provided, returns info by id.
   If id is not provided, returns info about authenticated user. Any authenticated user can see other user's profile info.
 - URL: http://localhost:8080/api/users/info
-- Method: GET 
+- Method: GET
 - @RequestParam(required = false) Long id
 - Authentication: Required
 
@@ -242,7 +262,7 @@ Important! To run manual update of the database using AdminGameController endpoi
 
 ## Automatic Game Fetch on Application Startup
 The application is configured to automatically fetch best games from the external API when the backend starts.
-# How It Works
+### How It Works
 - The main Spring Boot application class implements CommandLineRunner
 - On startup, Spring executes the run() method
 - This triggers an automatic call to gameService
@@ -250,8 +270,20 @@ The application is configured to automatically fetch best games from the externa
 
 ## Scheduled Daily Game Fetch
 The application includes a scheduled task that automatically fetches best games once per day.
-- Time: Every day at 06:00 AM
-- Time zone: Europe/Kyiv
-- Trigger mechanism: Spring’s @Scheduled with a cron expression
+- At specified time
+- At specified time zone
 - The scheduler runs automatically without any manual intervention
 - Only new games are saved
+
+## Postman
+A Postman collection is available to simplify testing the API.
+👉 [Open Online Bookstore Postman Collection](https://web.postman.co/workspace/49ed7a22-2d52-45ef-8ca1-c68f46105379/collection/40367151-a6927aa5-a3dc-41f6-b78a-440c659f52d5?action=share&source=copy-link&creator=40367151)
+
+How to use this Postman collection:
+1. Click the link above.
+2. Import the collection into your Postman app.
+3. Run requests against http://localhost:8080/api/
+4. Authenticate by registering and/or logging in to get a JWT token.
+5. Go to the Authorization tab.
+6. Choose Bearer Token as the Auth Type.
+7. Paste the JWT token you received into the token field to access all protected endpoints.
