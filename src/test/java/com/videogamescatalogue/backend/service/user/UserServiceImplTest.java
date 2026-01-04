@@ -13,12 +13,14 @@ import com.videogamescatalogue.backend.dto.internal.user.ChangePasswordRequestDt
 import com.videogamescatalogue.backend.dto.internal.user.UpdateUserRequestDto;
 import com.videogamescatalogue.backend.dto.internal.user.UserRegistrationRequestDto;
 import com.videogamescatalogue.backend.dto.internal.user.UserResponseDto;
+import com.videogamescatalogue.backend.dto.internal.usergame.UserGameStatusDto;
 import com.videogamescatalogue.backend.exception.InvalidInputException;
 import com.videogamescatalogue.backend.exception.RegistrationException;
 import com.videogamescatalogue.backend.mapper.user.UserMapper;
 import com.videogamescatalogue.backend.model.Role;
 import com.videogamescatalogue.backend.model.User;
 import com.videogamescatalogue.backend.repository.UserRepository;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -71,9 +73,13 @@ class UserServiceImplTest {
         user.setLocation("location");
         user.getRoles().add(role);
 
+        UserGameStatusDto userGameStatusDto = new UserGameStatusDto(
+                5463L, "COMPLETED"
+        );
         responseDtoUser = new UserResponseDto(
                 10L, "profileName",
-                "about", "location"
+                "about", "location",
+                List.of(userGameStatusDto)
         );
 
         userBob = new User();
@@ -87,7 +93,8 @@ class UserServiceImplTest {
 
         responseDtoBob = new UserResponseDto(
                 9L, "profileNameBob",
-                "aboutBob", "locationBob"
+                "aboutBob", "locationBob",
+                List.of(userGameStatusDto)
         );
 
         updateUserRequestDto = new UpdateUserRequestDto(

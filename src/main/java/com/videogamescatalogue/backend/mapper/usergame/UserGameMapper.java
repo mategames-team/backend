@@ -1,7 +1,6 @@
 package com.videogamescatalogue.backend.mapper.usergame;
 
 import com.videogamescatalogue.backend.config.MapperConfig;
-import com.videogamescatalogue.backend.dto.internal.game.GameDto;
 import com.videogamescatalogue.backend.dto.internal.usergame.UserGameDto;
 import com.videogamescatalogue.backend.dto.internal.usergame.UserGameStatusDto;
 import com.videogamescatalogue.backend.model.Game;
