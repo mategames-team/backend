@@ -107,7 +107,8 @@ class CommentServiceImplTest {
         comment.setUser(user);
 
         commentDto = new CommentDto(
-                1L, 1L, 10L, "comment text",
+                1L, 1L, "GameName", 10L,
+                "user", "comment text",
                 LocalDateTime.now(), 5
         );
 
@@ -122,7 +123,8 @@ class CommentServiceImplTest {
         );
 
         commentDtoUpdated = new CommentDto(
-                2L, 1L, 10L, "comment text updated",
+                2L, 1L, "GameName", 10L,
+                "user", "comment text updated",
                 LocalDateTime.now(), 5
         );
     }
