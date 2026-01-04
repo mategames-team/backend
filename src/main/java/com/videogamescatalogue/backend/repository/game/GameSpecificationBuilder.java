@@ -20,7 +20,7 @@ public class GameSpecificationBuilder
         if (searchParameters == null) {
             throw new IllegalArgumentException("Search Parameters cannot be null");
         }
-        Specification<Game> specification = Specification.where(null);
+        Specification<Game> specification = Specification.where((Specification<Game>) null);
         specification = getSpecificationForParam(
                 searchParameters.name(),
                 Game.SpecificationKey.NAME.getValue(), specification
