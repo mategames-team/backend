@@ -1,0 +1,58 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-games-table
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+          - tableExists:
+              tableName: games
+      changes:
+        - createTable:
+            tableName: games
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: api_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    unique: true
+
+              - column:
+                  name: name
+                  type: VARCHAR(200)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: year
+                  type: INT
+
+              - column:
+                  name: background_image
+                  type: VARCHAR(500)
+
+              - column:
+                  name: api_rating
+                  type: DECIMAL(4,2)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: description
+                  type: VARCHAR(5000)
+
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false

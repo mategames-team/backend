@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-users
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM users WHERE email='admin@gmail.com'
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: profile_name
+                  value: admin
+              - column:
+                  name: password
+                  value: $2a$10$iHLvIfNAFWubZLSUjY4kCeB9.gMurj6ePKehoCcHnn0dWEZBvnY9i
+              - column:
+                  name: email
+                  value: admin@gmail.com
+              - column:
+                  name: about
+                  value: Admin
+              - column:
+                  name: location
+                  value: Admin
+              - column:
+                  name: is_deleted
+                  valueBoolean: false
