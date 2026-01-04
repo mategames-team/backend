@@ -5,7 +5,9 @@ import java.time.LocalDateTime;
 public record CommentDto(
         Long id,
         Long gameApiId,
+        String gameName,
         Long userId,
+        String profileName,
         String text,
         LocalDateTime localDateTime,
         Integer rating
