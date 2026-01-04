@@ -9,11 +9,12 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-@Mapper(config = MapperConfig.class)
+@Mapper(config = MapperConfig.class, uses = UserGameProvider.class)
 public interface UserMapper {
     @Mapping(target = "password", ignore = true)
     User toModel(UserRegistrationRequestDto requestDto);
 
+    @Mapping(source = "id", target = "userGames", qualifiedByName = "getStatusDtoList")
     UserResponseDto toDto(User user);
 
     User updateProfileInfo(@MappingTarget User user, UpdateUserRequestDto requestDto);
