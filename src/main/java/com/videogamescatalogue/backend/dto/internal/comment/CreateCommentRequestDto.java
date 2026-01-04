@@ -10,7 +10,7 @@ public record CreateCommentRequestDto(
         String text,
         @NotNull
         @Min(0)
-        @Max(5)
+        @Max(10)
         Integer rating
 ) {
 }
