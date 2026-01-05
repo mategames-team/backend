@@ -1,13 +1,17 @@
 name: Trigger Build on Main Repo
 
 on:
-  push:
+  workflow_run:
+    workflows: ["Java CI"]
+    types:
+      - completed
     branches:
       - main
 
 jobs:
   notify:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Trigger build in main repository
         run: |
@@ -15,9 +19,9 @@ jobs:
             -H "Accept: application/vnd.github.v3+json" \
             -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
             https://api.github.com/repos/Bondaliname/my-project-infrastructure/dispatches \
-            -d '{"event_type":"backend-updated","client_payload":{"ref":"${{ github.ref }}","sha":"${{ github.sha }}"}}'
-      
+            -d '{"event_type":"backend-updated","client_payload":{"ref":"refs/heads/${{ github.event.workflow_run.head_branch }}","sha":"${{ github.event.workflow_run.head_sha }}"}}'
+
       - name: Summary
         run: |
-          echo "Commit: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
-          echo "Branch: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "Commit: ${{ github.event.workflow_run.head_sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "Branch: ${{ github.event.workflow_run.head_branch }}" >> $GITHUB_STEP_SUMMARY
