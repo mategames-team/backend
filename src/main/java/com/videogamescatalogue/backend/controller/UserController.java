@@ -3,6 +3,7 @@ package com.videogamescatalogue.backend.controller;
 import com.videogamescatalogue.backend.dto.internal.user.ChangePasswordRequestDto;
 import com.videogamescatalogue.backend.dto.internal.user.UpdateUserRequestDto;
 import com.videogamescatalogue.backend.dto.internal.user.UserResponseDto;
+import com.videogamescatalogue.backend.exception.AccessNotAllowedException;
 import com.videogamescatalogue.backend.model.User;
 import com.videogamescatalogue.backend.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,7 +34,7 @@ public class UserController {
                     Returns user profile information. 
                     If id is provided, returns info by id.
                     If id is not provided, returns info about authenticated user.
-                    Requires authentication
+                    Does not require authentication
                     """
     )
     @ApiResponse(
@@ -58,10 +59,7 @@ public class UserController {
             @RequestParam(required = false) Long id,
             @AuthenticationPrincipal User user
     ) {
-        if (id == null) {
-            return userService.getAuthenticatedUserInfo(user);
-        }
-        return userService.getUserInfoById(id, user);
+        return userService.getUserInfo(id, user);
     }
 
     @Operation(

@@ -23,8 +23,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
-    public static final String[] PUBLIC_ENDPOINTS = {"/auth/**", "/games/**", "/error",
-            "/swagger-ui/**", "/v3/api-docs/**", "/actuator/health/**"};
+    public static final String[] PUBLIC_ENDPOINTS = {
+            "/auth/**", "/games/**", "/users/info/**", "/error",
+            "/swagger-ui/**", "/v3/api-docs/**", "/actuator/health/**"
+    };
     private final UserDetailsService userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
