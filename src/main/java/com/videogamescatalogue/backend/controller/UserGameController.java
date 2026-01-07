@@ -123,12 +123,13 @@ public class UserGameController {
     @GetMapping
     public Page<UserGameDto> getByStatus(
             @RequestParam UserGame.GameStatus status,
-            @AuthenticationPrincipal User user,
+            @RequestParam(required = false) Long userId,
+            @AuthenticationPrincipal User authenticatedUser,
             @PageableDefault(size = DEFAULT_PAGE_SIZE)
             Pageable pageable
     ) {
         return userGameService.getByStatus(
-                status, user.getId(), pageable
+                status, userId, authenticatedUser, pageable
         );
     }
 }

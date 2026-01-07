@@ -146,6 +146,15 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
                 HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(AuthenticationRequiredException.class)
+    protected ResponseEntity<Object> handleAuthenticationRequiredException(
+            AuthenticationRequiredException ex
+    ) {
+        log.info("Authentication Required error", ex);
+        return new ResponseEntity<>(getBody(List.of(ex.getMessage())),
+                HttpStatus.UNAUTHORIZED);
+    }
+
     private String getErrorMessage(ObjectError error) {
         if (error instanceof FieldError fieldError) {
             return fieldError.getField() + ": " + error.getDefaultMessage();

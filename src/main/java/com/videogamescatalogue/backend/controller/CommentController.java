@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -81,8 +82,9 @@ public class CommentController {
     }
 
     @Operation(
-            summary = "Get authenticated user's comments",
-            description = "Returns paginated comments created by the authenticated user"
+            summary = "Get usercomments",
+            description = "Returns paginated comments created by "
+                    + "the authenticated user or a user by id"
     )
     @ApiResponse(
             responseCode = "200",
@@ -96,11 +98,12 @@ public class CommentController {
     )
     @GetMapping("/comments")
     public Page<CommentDto> getUserComments(
+            @RequestParam(required = false) Long id,
             @AuthenticationPrincipal User user,
             @PageableDefault(size = DEFAULT_PAGE_SIZE)
             Pageable pageable
     ) {
-        return commentService.getUserComments(user.getId(), pageable);
+        return commentService.getUserComments(user, id, pageable);
     }
 
     @Operation(

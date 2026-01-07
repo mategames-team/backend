@@ -4,6 +4,7 @@ import com.videogamescatalogue.backend.dto.internal.user.ChangePasswordRequestDt
 import com.videogamescatalogue.backend.dto.internal.user.UpdateUserRequestDto;
 import com.videogamescatalogue.backend.dto.internal.user.UserRegistrationRequestDto;
 import com.videogamescatalogue.backend.dto.internal.user.UserResponseDto;
+import com.videogamescatalogue.backend.exception.AuthenticationRequiredException;
 import com.videogamescatalogue.backend.exception.EntityNotFoundException;
 import com.videogamescatalogue.backend.exception.InvalidInputException;
 import com.videogamescatalogue.backend.exception.RegistrationException;
@@ -52,21 +53,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDto getUserInfoById(Long userId, User authenticatedUser) {
-        if (authenticatedUser.getId().equals(userId)) {
-            return userMapper.toDto(authenticatedUser);
+    public UserResponseDto getUserInfo(Long userId, User authenticatedUser) {
+        if (authenticatedUser == null && userId == null) {
+            throw new AuthenticationRequiredException("Authentication is required");
         }
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new EntityNotFoundException(
-                        "There is no user by id: " + userId
-                )
-        );
-        return userMapper.toDto(user);
-    }
-
-    @Override
-    public UserResponseDto getAuthenticatedUserInfo(User authenticatedUser) {
-        return userMapper.toDto(authenticatedUser);
+        if (userId == null) {
+            return getAuthenticatedUserInfo(authenticatedUser);
+        }
+        return getUserInfoById(userId);
     }
 
     @Override
@@ -116,5 +110,18 @@ public class UserServiceImpl implements UserService {
             throw new RegistrationException("Can't register user. User with email: "
                     + email + " is already registered.");
         }
+    }
+
+    private UserResponseDto getUserInfoById(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new EntityNotFoundException(
+                        "There is no user by id: " + userId
+                )
+        );
+        return userMapper.toDto(user);
+    }
+
+    private UserResponseDto getAuthenticatedUserInfo(User authenticatedUser) {
+        return userMapper.toDto(authenticatedUser);
     }
 }

@@ -15,6 +15,7 @@ public interface UserGameService {
     Page<UserGameDto> getByStatus(
             UserGame.GameStatus status,
             Long userId,
+            User authenticatedUser,
             Pageable pageable
     );
 }

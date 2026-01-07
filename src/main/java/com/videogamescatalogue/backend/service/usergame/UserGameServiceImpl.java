@@ -4,6 +4,7 @@ import com.videogamescatalogue.backend.dto.external.ApiResponseFullGameDto;
 import com.videogamescatalogue.backend.dto.internal.usergame.CreateUserGameDto;
 import com.videogamescatalogue.backend.dto.internal.usergame.UserGameDto;
 import com.videogamescatalogue.backend.exception.AccessNotAllowedException;
+import com.videogamescatalogue.backend.exception.AuthenticationRequiredException;
 import com.videogamescatalogue.backend.exception.EntityNotFoundException;
 import com.videogamescatalogue.backend.mapper.game.GameMapper;
 import com.videogamescatalogue.backend.mapper.usergame.UserGameMapper;
@@ -61,7 +62,22 @@ public class UserGameServiceImpl implements UserGameService {
     public Page<UserGameDto> getByStatus(
             UserGame.GameStatus status,
             Long userId,
+            User authenticatedUser,
             Pageable pageable) {
+        if (authenticatedUser == null && userId == null) {
+            throw new AuthenticationRequiredException("Authentication is required");
+        }
+        if (userId == null) {
+            return findByUserIdAndStatus(
+                    authenticatedUser.getId(), status, pageable
+            );
+        }
+        return findByUserIdAndStatus(userId,status,pageable);
+    }
+
+    private Page<UserGameDto> findByUserIdAndStatus(
+            Long userId, UserGame.GameStatus status, Pageable pageable
+    ) {
         Page<UserGame> userGames = userGameRepository.findByUserIdAndStatus(
                 userId, status, pageable
         );
