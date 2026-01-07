@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto getUserInfo(Long userId, User authenticatedUser) {
         if (authenticatedUser == null && userId == null) {
-            throw new AuthenticationRequiredException("Authentication required");
+            throw new AuthenticationRequiredException("Authentication is required");
         }
         if (userId == null) {
             return getAuthenticatedUserInfo(authenticatedUser);

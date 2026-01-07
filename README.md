@@ -187,10 +187,10 @@ _ Description: Authenticates a user and returns JWT token.
 - Authentication: Not required
 
 ### getUserComments
-- Description: Returns a paginated list of comments created by the authenticated user.
-- URL: http://localhost:8080/api/comments
+- Description: Returns a paginated list of comments created by the authenticated user or a user by id.
+- URL: http://localhost:8080/api/users/info/comments
 - Method: GET
-- Authentication: Required
+- Authentication: Not required
 
 ### updateComment
 - Description: Updates an existing comment owned by the authenticated user.

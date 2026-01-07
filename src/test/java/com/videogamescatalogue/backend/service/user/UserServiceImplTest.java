@@ -155,7 +155,7 @@ class UserServiceImplTest {
         when(userMapper.toDto(user))
                 .thenReturn(responseDtoBob);
 
-        UserResponseDto actual = userService.getUserInfoById(10L, user);
+        UserResponseDto actual = userService.getUserInfo(10L, user);
 
         assertEquals(responseDtoBob, actual);
 
@@ -169,7 +169,7 @@ class UserServiceImplTest {
         when(userMapper.toDto(userBob))
                 .thenReturn(responseDtoBob);
 
-        UserResponseDto actual = userService.getUserInfoById(9L, user);
+        UserResponseDto actual = userService.getUserInfo(9L, user);
 
         assertEquals(responseDtoBob, actual);
         assertNotEquals(responseDtoUser, actual);
