@@ -96,7 +96,7 @@ public class CommentController {
             description = "User is not authenticated",
             content = @Content
     )
-    @GetMapping("/users/info/comments")
+    @GetMapping("/comments")
     public Page<CommentDto> getUserComments(
             @RequestParam(required = false) Long id,
             @AuthenticationPrincipal User user,

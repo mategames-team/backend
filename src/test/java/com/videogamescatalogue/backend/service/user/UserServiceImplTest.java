@@ -14,6 +14,7 @@ import com.videogamescatalogue.backend.dto.internal.user.UpdateUserRequestDto;
 import com.videogamescatalogue.backend.dto.internal.user.UserRegistrationRequestDto;
 import com.videogamescatalogue.backend.dto.internal.user.UserResponseDto;
 import com.videogamescatalogue.backend.dto.internal.usergame.UserGameStatusDto;
+import com.videogamescatalogue.backend.exception.AuthenticationRequiredException;
 import com.videogamescatalogue.backend.exception.InvalidInputException;
 import com.videogamescatalogue.backend.exception.RegistrationException;
 import com.videogamescatalogue.backend.mapper.user.UserMapper;
@@ -151,15 +152,39 @@ class UserServiceImplTest {
     }
 
     @Test
-    void getUserInfo_usersMatch_returnAuthenticatedUserInfo() {
+    void getUserInfo_onlyAuthUser_returnAuthenticatedUserInfo() {
         when(userMapper.toDto(user))
+                .thenReturn(responseDtoUser);
+
+        UserResponseDto actual = userService.getUserInfo(null, user);
+
+        assertEquals(responseDtoUser, actual);
+
+        verifyNoInteractions(userRepository);
+    }
+
+    @Test
+    void getUserInfo_onlyUserId_returnUserInfoById() {
+        when(userRepository.findById(9L))
+                .thenReturn(Optional.ofNullable(userBob));
+        when(userMapper.toDto(userBob))
                 .thenReturn(responseDtoBob);
 
-        UserResponseDto actual = userService.getUserInfo(10L, user);
+        UserResponseDto actual = userService.getUserInfo(9L, null);
 
         assertEquals(responseDtoBob, actual);
 
-        verifyNoInteractions(userRepository);
+        verify(userRepository).findById(9L);
+    }
+
+    @Test
+    void getUserInfo_thUserNoId_throwException() {
+        assertThrows(
+                AuthenticationRequiredException.class,
+                () -> userService.getUserInfo(null, null)
+        );
+
+        verifyNoInteractions(userRepository, userMapper);
     }
 
     @Test

@@ -4,6 +4,7 @@ import com.videogamescatalogue.backend.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
@@ -27,6 +28,9 @@ public class SecurityConfig {
             "/auth/**", "/games/**", "/users/info/**", "/error",
             "/swagger-ui/**", "/v3/api-docs/**", "/actuator/health/**"
     };
+    public static final String[] GET_PUBLIC_ENDPOINTS = {
+            "/user-games/**", "/comments/**"
+    };
     private final UserDetailsService userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
@@ -42,8 +46,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers(PUBLIC_ENDPOINTS)
-                                .permitAll()
+                                .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+                                .requestMatchers(HttpMethod.GET, GET_PUBLIC_ENDPOINTS).permitAll()
                                 .anyRequest()
                                 .authenticated()
                 )
