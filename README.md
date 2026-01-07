@@ -187,10 +187,10 @@ _ Description: Authenticates a user and returns JWT token.
 - Authentication: Not required
 
 ### getUserComments
-- Description: Returns a paginated list of comments created by the authenticated user.
+- Description: Returns a paginated list of comments created by the authenticated user or a user by id.
 - URL: http://localhost:8080/api/comments
 - Method: GET
-- Authentication: Required
+- Authentication: Not required
 
 ### updateComment
 - Description: Updates an existing comment owned by the authenticated user.
@@ -207,11 +207,11 @@ _ Description: Authenticates a user and returns JWT token.
 ## UserController
 ### getUserInfo
 - Description: Returns user information. If id is provided, returns info by id.
-  If id is not provided, returns info about authenticated user. Any authenticated user can see other user's profile info.
+  If id is not provided, returns info about authenticated user. Any user can see other user's profile info.
 - URL: http://localhost:8080/api/users/info
 - Method: GET
 - @RequestParam(required = false) Long id
-- Authentication: Required
+- Authentication: not required
 
 ### updateUserInfo
 - Description: Updates the authenticated user’s profile information (profileName, email, about, location).
@@ -242,7 +242,7 @@ _ Description: Authenticates a user and returns JWT token.
 - Description: Returns a paginated list of any user’s games filtered by status.
 - URL: http://localhost:8080/api/user-games
 - Method: GET
-- Authentication: Required
+- Authentication: Not required
 
 ## AdminGameController
 Provides administrative endpoints for managing game data fetched from an external API. These endpoints are intended only for administrators and are protected by role-based security.

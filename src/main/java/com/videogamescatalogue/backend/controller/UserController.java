@@ -33,7 +33,7 @@ public class UserController {
                     Returns user profile information. 
                     If id is provided, returns info by id.
                     If id is not provided, returns info about authenticated user.
-                    Requires authentication
+                    Does not require authentication
                     """
     )
     @ApiResponse(
@@ -58,10 +58,7 @@ public class UserController {
             @RequestParam(required = false) Long id,
             @AuthenticationPrincipal User user
     ) {
-        if (id == null) {
-            return userService.getAuthenticatedUserInfo(user);
-        }
-        return userService.getUserInfoById(id, user);
+        return userService.getUserInfo(id, user);
     }
 
     @Operation(

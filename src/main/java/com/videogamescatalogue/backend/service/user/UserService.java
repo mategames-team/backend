@@ -11,9 +11,7 @@ public interface UserService {
             UserRegistrationRequestDto requestDto
     );
 
-    UserResponseDto getUserInfoById(Long userId, User authenticatedUser);
-
-    UserResponseDto getAuthenticatedUserInfo(User authenticatedUser);
+    UserResponseDto getUserInfo(Long userId, User authenticatedUser);
 
     UserResponseDto updateUserInfo(UpdateUserRequestDto requestDto, User authenticatedUser);
 

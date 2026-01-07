@@ -179,7 +179,7 @@ class CommentServiceImplTest {
                 .thenReturn(commentPage);
         when(commentMapper.toDto(comment)).thenReturn(commentDto);
 
-        Page<CommentDto> actual = commentService.getUserComments(userId, pageable);
+        Page<CommentDto> actual = commentService.getUserComments(user, userId, pageable);
 
         assertNotNull(actual);
         assertEquals(commentDtoPage, actual);

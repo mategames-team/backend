@@ -5,6 +5,7 @@ import com.videogamescatalogue.backend.dto.internal.comment.CommentDto;
 import com.videogamescatalogue.backend.dto.internal.comment.CreateCommentRequestDto;
 import com.videogamescatalogue.backend.dto.internal.comment.UpdateCommentRequestDto;
 import com.videogamescatalogue.backend.exception.AccessNotAllowedException;
+import com.videogamescatalogue.backend.exception.AuthenticationRequiredException;
 import com.videogamescatalogue.backend.exception.EntityNotFoundException;
 import com.videogamescatalogue.backend.mapper.comment.CommentMapper;
 import com.videogamescatalogue.backend.mapper.game.GameMapper;
@@ -48,7 +49,19 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Page<CommentDto> getUserComments(Long userId, Pageable pageable) {
+    public Page<CommentDto> getUserComments(
+            User authenticatedUser, Long userId, Pageable pageable
+    ) {
+        if (authenticatedUser == null && userId == null) {
+            throw new AuthenticationRequiredException("Authentication is required");
+        }
+        if (userId == null) {
+            return findCommentsByUserId(authenticatedUser.getId(), pageable);
+        }
+        return findCommentsByUserId(userId, pageable);
+    }
+
+    private Page<CommentDto> findCommentsByUserId(Long userId, Pageable pageable) {
         Page<Comment> userComments = commentRepository.findAllByUserId(userId, pageable);
         return userComments.map(commentMapper::toDto);
     }
