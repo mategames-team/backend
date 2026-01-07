@@ -4,7 +4,6 @@ import com.videogamescatalogue.backend.dto.internal.user.ChangePasswordRequestDt
 import com.videogamescatalogue.backend.dto.internal.user.UpdateUserRequestDto;
 import com.videogamescatalogue.backend.dto.internal.user.UserRegistrationRequestDto;
 import com.videogamescatalogue.backend.dto.internal.user.UserResponseDto;
-import com.videogamescatalogue.backend.exception.AccessNotAllowedException;
 import com.videogamescatalogue.backend.exception.AuthenticationRequiredException;
 import com.videogamescatalogue.backend.exception.EntityNotFoundException;
 import com.videogamescatalogue.backend.exception.InvalidInputException;

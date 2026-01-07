@@ -75,7 +75,9 @@ public class UserGameServiceImpl implements UserGameService {
         return findByUserIdAndStatus(userId,status,pageable);
     }
 
-    private Page<UserGameDto> findByUserIdAndStatus(Long userId, UserGame.GameStatus status, Pageable pageable) {
+    private Page<UserGameDto> findByUserIdAndStatus(
+            Long userId, UserGame.GameStatus status, Pageable pageable
+    ) {
         Page<UserGame> userGames = userGameRepository.findByUserIdAndStatus(
                 userId, status, pageable
         );

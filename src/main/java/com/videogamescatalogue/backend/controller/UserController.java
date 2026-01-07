@@ -3,7 +3,6 @@ package com.videogamescatalogue.backend.controller;
 import com.videogamescatalogue.backend.dto.internal.user.ChangePasswordRequestDto;
 import com.videogamescatalogue.backend.dto.internal.user.UpdateUserRequestDto;
 import com.videogamescatalogue.backend.dto.internal.user.UserResponseDto;
-import com.videogamescatalogue.backend.exception.AccessNotAllowedException;
 import com.videogamescatalogue.backend.model.User;
 import com.videogamescatalogue.backend.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
