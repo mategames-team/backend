@@ -68,9 +68,11 @@ class UserGameServiceImplTest {
         user.setLocation("location");
         user.getRoles().add(role);
 
+        Game game = new Game();
+        game.setApiId(100L);
         userGame = new UserGame();
         userGame.setUser(user);
-        userGame.setGame(new Game());
+        userGame.setGame(game);
         userGame.setStatus(UserGame.GameStatus.BACKLOG);
 
         platformDto = new PlatformDto("PC");
@@ -94,7 +96,7 @@ class UserGameServiceImplTest {
 
     @Test
     void createOrUpdate_alreadyExists_update() {
-        when(userGameRepository.findByUserIdAndGameApiId(
+        when(userGameRepository.findByUser_IdAndGame_ApiId(
                 user.getId(),
                 createUserGameDto.apiId()
         )).thenReturn(Optional.of(userGame));
@@ -110,7 +112,7 @@ class UserGameServiceImplTest {
         assertNotNull(actual);
         assertEquals(userGameDto, actual);
 
-        verify(userGameRepository).findByUserIdAndGameApiId(
+        verify(userGameRepository).findByUser_IdAndGame_ApiId(
                 user.getId(),
                 createUserGameDto.apiId()
         );
@@ -119,7 +121,7 @@ class UserGameServiceImplTest {
 
     @Test
     void createOrUpdate_newUserGameAndGameInDb_createUserGameDto() {
-        when(userGameRepository.findByUserIdAndGameApiId(
+        when(userGameRepository.findByUser_IdAndGame_ApiId(
                 user.getId(),
                 createUserGameDto.apiId()
         )).thenReturn(Optional.empty());
@@ -140,7 +142,7 @@ class UserGameServiceImplTest {
         assertNotNull(actual);
         assertEquals(userGameDto, actual);
 
-        verify(userGameRepository).findByUserIdAndGameApiId(
+        verify(userGameRepository).findByUser_IdAndGame_ApiId(
                 user.getId(),
                 createUserGameDto.apiId()
         );
@@ -150,14 +152,18 @@ class UserGameServiceImplTest {
     @Test
     void delete_validRequest_delete() {
         Long userGameId = userGame.getId();
-        when(userGameRepository.findById(userGameId))
+        when(userGameRepository.findByUser_IdAndGame_ApiId(
+                user.getId(), userGame.getGame().getApiId()
+        ))
                 .thenReturn(Optional.of(userGame));
 
         assertDoesNotThrow(() -> userGameService.delete(
-                userGameId, user
+                userGame.getGame().getApiId(), user
         ));
 
-        verify(userGameRepository).findById(userGameId);
-        verify(userGameRepository).deleteById(userGameId);
+        verify(userGameRepository).findByUser_IdAndGame_ApiId(
+                user.getId(), userGame.getGame().getApiId()
+        );
+        verify(userGameRepository).delete(userGame);
     }
 }

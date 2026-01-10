@@ -234,7 +234,7 @@ _ Description: Authenticates a user and returns JWT token.
 
 ### deleteUserGame
 - Description: Removes a game from the authenticated user’s list.
-- URL: http://localhost:8080/api/user-games/{id}
+- URL: http://localhost:8080/api/user-games/{apiId}
 - Method: DELETE
 - Authentication: Required
 
