@@ -3,7 +3,6 @@ package com.videogamescatalogue.backend.service.usergame;
 import com.videogamescatalogue.backend.dto.external.ApiResponseFullGameDto;
 import com.videogamescatalogue.backend.dto.internal.usergame.CreateUserGameDto;
 import com.videogamescatalogue.backend.dto.internal.usergame.UserGameDto;
-import com.videogamescatalogue.backend.exception.AccessNotAllowedException;
 import com.videogamescatalogue.backend.exception.AuthenticationRequiredException;
 import com.videogamescatalogue.backend.exception.EntityNotFoundException;
 import com.videogamescatalogue.backend.mapper.game.GameMapper;
@@ -31,7 +30,7 @@ public class UserGameServiceImpl implements UserGameService {
 
     @Override
     public UserGameDto createOrUpdate(CreateUserGameDto createDto, User user) {
-        Optional<UserGame> userGameOptional = userGameRepository.findByUserIdAndGameApiId(
+        Optional<UserGame> userGameOptional = userGameRepository.findByUser_IdAndGame_ApiId(
                 user.getId(),
                 createDto.apiId()
         );
@@ -53,9 +52,9 @@ public class UserGameServiceImpl implements UserGameService {
     }
 
     @Override
-    public void delete(Long id, User user) {
-        checkBelongsToUser(id, user.getId());
-        userGameRepository.deleteById(id);
+    public void delete(Long apiId, User user) {
+        UserGame userGame = getUserGame(user.getId(), apiId);
+        userGameRepository.delete(userGame);
     }
 
     @Override
@@ -84,17 +83,15 @@ public class UserGameServiceImpl implements UserGameService {
         return userGames.map(userGameMapper::toDto);
     }
 
-    private void checkBelongsToUser(Long id, Long userId) {
-        Optional<UserGame> userGameOptional = userGameRepository.findById(id);
+    private UserGame getUserGame(Long userId, Long apiId) {
+        Optional<UserGame> userGameOptional = userGameRepository.findByUser_IdAndGame_ApiId(
+                userId, apiId
+        );
         if (userGameOptional.isEmpty()) {
-            throw new EntityNotFoundException("There is no userGame by id: " + id);
+            throw new EntityNotFoundException("There is no userGame by apiId: " + apiId
+            + " for user with id: " + userId);
         }
-
-        Long userGameUserId = userGameOptional.get().getUser().getId();
-        if (!userGameUserId.equals(userId)) {
-            throw new AccessNotAllowedException("User with id: "
-                    + userId + "is not allowed to access userGame with id: " + id);
-        }
+        return userGameOptional.get();
     }
 
     private UserGameDto addGameAndSave(UserGame userGame, Game game) {

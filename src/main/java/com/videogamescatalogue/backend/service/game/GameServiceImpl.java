@@ -140,7 +140,7 @@ public class GameServiceImpl implements GameService {
             return null;
         }
 
-        Optional<UserGame> userGameOptional = userGameRepository.findByUserIdAndGameApiId(
+        Optional<UserGame> userGameOptional = userGameRepository.findByUser_IdAndGame_ApiId(
                 user.getId(), apiId
         );
         return userGameOptional.map(UserGame::getStatus)

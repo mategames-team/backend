@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 public interface UserGameService {
     UserGameDto createOrUpdate(CreateUserGameDto createDto, User user);
 
-    void delete(Long id, User user);
+    void delete(Long apiId, User user);
 
     Page<UserGameDto> getByStatus(
             UserGame.GameStatus status,
