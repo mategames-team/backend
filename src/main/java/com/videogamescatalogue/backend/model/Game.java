@@ -67,7 +67,7 @@ public class Game {
     @Getter
     public enum SpecificationKey {
         NAME("name"),
-        YEAR("year"),
+        YEARS("years"),
         PLATFORMS("platforms"),
         GENRES("genres");
 

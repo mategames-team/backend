@@ -92,13 +92,13 @@ public class UserGameController {
             description = "User game not found",
             content = @Content
     )
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{apiId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(
-            @PathVariable Long id,
+            @PathVariable Long apiId,
             @AuthenticationPrincipal User user
     ) {
-        userGameService.delete(id, user);
+        userGameService.delete(apiId, user);
     }
 
     @Operation(
