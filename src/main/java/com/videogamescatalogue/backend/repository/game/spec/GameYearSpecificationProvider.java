@@ -6,13 +6,14 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 @Component
-public class GameYearSpecificationProvider implements SpecificationProvider<Game, Integer> {
+public class GameYearSpecificationProvider implements SpecificationProvider<Game, List<Integer>> {
 
-    public static final String KEY = Game.SpecificationKey.YEAR.getValue();
+    public static final String KEY = Game.SpecificationKey.YEARS.getValue();
 
     @Override
     public String getKey() {
@@ -20,7 +21,7 @@ public class GameYearSpecificationProvider implements SpecificationProvider<Game
     }
 
     @Override
-    public Specification<Game> getSpecification(Integer param) {
+    public Specification<Game> getSpecification(List<Integer> years) {
         return new Specification<Game>() {
             @Override
             public Predicate toPredicate(
@@ -28,7 +29,8 @@ public class GameYearSpecificationProvider implements SpecificationProvider<Game
                     CriteriaQuery<?> query,
                     CriteriaBuilder criteriaBuilder
             ) {
-                return criteriaBuilder.equal(root.get(KEY), param);
+
+                return root.get("year").in(years);
             }
         };
     }

@@ -26,8 +26,8 @@ public class GameSpecificationBuilder
                 Game.SpecificationKey.NAME.getValue(), specification
         );
         specification = getSpecificationForParam(
-                searchParameters.year(),
-                Game.SpecificationKey.YEAR.getValue(), specification
+                searchParameters.years(),
+                Game.SpecificationKey.YEARS.getValue(), specification
         );
         specification = getSpecificationForParam(
                 searchParameters.platforms(),
