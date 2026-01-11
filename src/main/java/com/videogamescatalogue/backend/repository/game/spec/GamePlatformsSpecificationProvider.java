@@ -39,9 +39,9 @@ public class GamePlatformsSpecificationProvider
                         .map(Platform.GeneralName::valueOf)
                         .toList();
 
-                Join<Object, Object> platromJoin = root.join(KEY);
+                Join<Object, Object> platformJoin = root.join(KEY);
 
-                return platromJoin.get("generalName").in(names);
+                return platformJoin.get("generalName").in(names);
             }
         };
     }

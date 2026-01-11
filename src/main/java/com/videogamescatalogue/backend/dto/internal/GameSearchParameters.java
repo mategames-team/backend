@@ -4,7 +4,7 @@ import java.util.List;
 
 public record GameSearchParameters(
         String name,
-        Integer year,
+        List<Integer> years,
         List<String> platforms,
         List<String> genres
 ) {
