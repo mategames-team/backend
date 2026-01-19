@@ -8,7 +8,7 @@ public record UpdateCommentRequestDto(
         @Size(max = 2000, message = "Comment must be less than 2000 digits")
         String text,
         @Min(0)
-        @Max(5)
+        @Max(10)
         Integer rating
 ) {
 }
