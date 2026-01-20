@@ -39,7 +39,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto registerUser(UserRegistrationRequestDto requestDto) {
-        checkUserAlreadyExists(requestDto.email());
+        checkUserAlreadyExistsByEmail(requestDto.email());
+        checkProfileNameAlreadyExists(requestDto.profileName());
 
         User user = userMapper.toModel(requestDto);
         user.setPassword(passwordEncoder.encode(requestDto.password()));
@@ -105,10 +106,17 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private void checkUserAlreadyExists(String email) {
+    private void checkUserAlreadyExistsByEmail(String email) {
         if (userRepository.existsByEmail(email)) {
             throw new RegistrationException("Can't register user. User with email: "
                     + email + " is already registered.");
+        }
+    }
+
+    private void checkProfileNameAlreadyExists(String profileName) {
+        if (userRepository.existsByProfileNameIgnoreCase(profileName)) {
+            throw new RegistrationException("Can't register user with profileName "
+                    + profileName + ". This profileName is already in use.");
         }
     }
 
