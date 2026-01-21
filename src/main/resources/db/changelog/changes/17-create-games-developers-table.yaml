@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-games-developers-table
+      author: julia
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: games_developers
+      changes:
+        - createTable:
+            tableName: games_developers
+            columns:
+              - column:
+                  name: game_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: developer_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - addPrimaryKey:
+                  tableName: games_developers
+                  columnNames: game_id, developer_id
+                  constraintName: pk_games_developers
+
+              - addForeignKeyConstraint:
+                  baseTableName: games_developers
+                  baseColumnNames: game_id
+                  referencedTableName: games
+                  referencedColumnNames: id
+                  constraintName: fk_games_developers_game
+
+              - addForeignKeyConstraint:
+                  baseTableName: games_developers
+                  baseColumnNames: developer_id
+                  referencedTableName: developers
+                  referencedColumnNames: id
+                  constraintName: fk_games_developers_developer
