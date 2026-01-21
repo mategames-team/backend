@@ -45,9 +45,11 @@ public interface GameMapper {
 
     @Mapping(source = "platforms", target = "platforms", qualifiedByName = "toPlatformDtosSet")
     @Mapping(source = "genres", target = "genres", qualifiedByName = "toGenreDtosSet")
+    @Mapping(source = "developers", target = "developers", qualifiedByName = "toDeveloperDtosSet")
     GameDto toDto(Game game);
 
     @Mapping(target = "status", source = "status")
+    @Mapping(source = "developers", target = "developers", qualifiedByName = "toDeveloperDtosSet")
     GameWithStatusDto toDtoWithStatus(Game game, UserGame.GameStatus status);
 
     @Named("toYear")

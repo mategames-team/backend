@@ -1,6 +1,7 @@
 package com.videogamescatalogue.backend.mapper.developer;
 
 import com.videogamescatalogue.backend.dto.external.ApiResponseDeveloperDto;
+import com.videogamescatalogue.backend.dto.internal.developer.DeveloperDto;
 import com.videogamescatalogue.backend.model.Developer;
 import com.videogamescatalogue.backend.repository.DeveloperRepository;
 import java.util.HashSet;
@@ -40,5 +41,10 @@ public class DeveloperProvider {
                 .collect(Collectors.toSet());
 
         return developersSet;
+    }
+
+    @Named("toDeveloperDtosSet")
+    public Set<DeveloperDto> toDeveloperDtosSet(Set<Developer> developers) {
+        return developerMapper.toDtoSet(developers);
     }
 }
