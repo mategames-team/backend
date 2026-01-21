@@ -1,11 +1,14 @@
 package com.videogamescatalogue.backend.service.game;
 
+import com.videogamescatalogue.backend.dto.external.ApiResponseDeveloperDto;
 import com.videogamescatalogue.backend.dto.external.ApiResponseFullGameDto;
 import com.videogamescatalogue.backend.dto.external.ApiResponseGameDto;
 import com.videogamescatalogue.backend.dto.internal.GameSearchParameters;
 import com.videogamescatalogue.backend.dto.internal.game.GameDto;
 import com.videogamescatalogue.backend.dto.internal.game.GameWithStatusDto;
+import com.videogamescatalogue.backend.mapper.developer.DeveloperMapper;
 import com.videogamescatalogue.backend.mapper.game.GameMapper;
+import com.videogamescatalogue.backend.model.Developer;
 import com.videogamescatalogue.backend.model.Game;
 import com.videogamescatalogue.backend.model.User;
 import com.videogamescatalogue.backend.model.UserGame;
@@ -17,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +36,7 @@ import org.springframework.stereotype.Service;
 public class GameServiceImpl implements GameService {
     private final RawgApiClient apiClient;
     private final GameMapper gameMapper;
+    private final DeveloperMapper developerMapper;
     private final GameRepository gameRepository;
     private final SpecificationBuilder<Game, GameSearchParameters> specificationBuilder;
     private final UserGameRepository userGameRepository;
@@ -154,15 +159,25 @@ public class GameServiceImpl implements GameService {
         }
         Game game = gameOptional.get();
         if (game.getDescription() == null) {
-            return updateGameDescription(apiId, game);
+            updateGameDescription(apiId, game);
+        }
+        if (game.getDevelopers().isEmpty()) {
+            updateGameDevelopers(apiId, game);
         }
         return game;
     }
 
-    private Game updateGameDescription(Long apiId, Game game) {
+    private void updateGameDescription(Long apiId, Game game) {
         ApiResponseFullGameDto apiGame = apiClient.getGameById(apiId);
         game.setDescription(apiGame.description());
-        return gameRepository.save(game);
+        gameRepository.save(game);
+    }
+
+    private void updateGameDevelopers(Long apiId, Game game) {
+        ApiResponseFullGameDto apiGame = apiClient.getGameById(apiId);
+        Set<Developer> developers = developerMapper.toModelSet(apiGame.developers());
+        game.setDevelopers(developers);
+        gameRepository.save(game);
     }
 
     private Game findFromApi(Long apiId) {
