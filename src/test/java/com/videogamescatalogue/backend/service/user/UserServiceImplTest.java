@@ -100,7 +100,7 @@ class UserServiceImplTest {
 
         updateUserRequestDto = new UpdateUserRequestDto(
                 "updated profileName", null,
-                null, null
+                null
         );
 
         changePasswordRequestDto = new ChangePasswordRequestDto(
