@@ -1,5 +1,6 @@
 package com.videogamescatalogue.backend.dto.internal.game;
 
+import com.videogamescatalogue.backend.dto.internal.developer.DeveloperDto;
 import com.videogamescatalogue.backend.dto.internal.genre.GenreDto;
 import com.videogamescatalogue.backend.dto.internal.platform.PlatformDto;
 import com.videogamescatalogue.backend.model.UserGame;
@@ -13,6 +14,7 @@ public record GameWithStatusDto(
         String backgroundImage,
         Set<PlatformDto> platforms,
         Set<GenreDto> genres,
+        Set<DeveloperDto> developers,
         BigDecimal apiRating,
         String description,
         UserGame.GameStatus status

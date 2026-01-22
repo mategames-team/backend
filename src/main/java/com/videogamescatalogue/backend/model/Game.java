@@ -57,6 +57,15 @@ public class Game {
     )
     private Set<Genre> genres = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "games_developers",
+            joinColumns = @JoinColumn(name = "game_id"),
+            inverseJoinColumns = @JoinColumn(name = "developer_id"),
+            uniqueConstraints = @UniqueConstraint(columnNames = {"game_id", "developer_id"})
+    )
+    private Set<Developer> developers = new HashSet<>();
+
     private BigDecimal apiRating;
 
     private String description;

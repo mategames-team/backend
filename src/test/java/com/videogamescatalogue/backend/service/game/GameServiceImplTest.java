@@ -9,15 +9,18 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import com.videogamescatalogue.backend.dto.external.ApiPlatformWrapper;
+import com.videogamescatalogue.backend.dto.external.ApiResponseDeveloperDto;
 import com.videogamescatalogue.backend.dto.external.ApiResponseFullGameDto;
 import com.videogamescatalogue.backend.dto.external.ApiResponseGameDto;
 import com.videogamescatalogue.backend.dto.external.ApiResponseGenreDto;
 import com.videogamescatalogue.backend.dto.external.ApiResponsePlatformDto;
+import com.videogamescatalogue.backend.dto.internal.developer.DeveloperDto;
 import com.videogamescatalogue.backend.dto.internal.game.GameDto;
 import com.videogamescatalogue.backend.dto.internal.game.GameWithStatusDto;
 import com.videogamescatalogue.backend.dto.internal.genre.GenreDto;
 import com.videogamescatalogue.backend.dto.internal.platform.PlatformDto;
 import com.videogamescatalogue.backend.mapper.game.GameMapper;
+import com.videogamescatalogue.backend.model.Developer;
 import com.videogamescatalogue.backend.model.Game;
 import com.videogamescatalogue.backend.model.Genre;
 import com.videogamescatalogue.backend.model.Platform;
@@ -84,6 +87,11 @@ class GameServiceImplTest {
         genreModel.setId(20L);
         genreModel.setName(Genre.Name.ACTION);
 
+        Developer developer = new Developer();
+        developer.setId(30L);
+        developer.setApiId(457389L);
+        developer.setName("Developer");
+
         gameModel = new Game();
         gameModel.setApiId(1L);
         gameModel.setName("Game");
@@ -93,6 +101,8 @@ class GameServiceImplTest {
         gameModel.setGenres(Set.of(genreModel));
         gameModel.setApiRating(BigDecimal.valueOf(4.75));
         gameModel.setDescription(null);
+        gameModel.setDevelopers(Set.of(developer));
+
         gameModelList = List.of(gameModel);
         responseGamesIds = List.of(1L);
         zeroGamesToSave = List.of();
@@ -102,24 +112,35 @@ class GameServiceImplTest {
 
         PlatformDto platformDto = new PlatformDto("PC");
         GenreDto genreDto = new GenreDto("Action");
+        DeveloperDto developerDto = new DeveloperDto(
+                30L, 457389L, "Developer"
+        );
         gameDto = new GameDto(
                 1L, "Game", 2025, "link",
                 Set.of(platformDto), Set.of(genreDto),
+                Set.of(developerDto),
                 BigDecimal.valueOf(4.75), null
         );
         oneGameDtoPage = new PageImpl<>(List.of(gameDto));
         gameWithDescrAndNullStatusDto = new GameWithStatusDto(
                 1L, "Game", 2025, "link",
                 Set.of(platformDto), Set.of(genreDto),
+                Set.of(developerDto),
                 BigDecimal.valueOf(4.75),
                 "description", null
         );
+
+        ApiResponseDeveloperDto apiResponseDeveloperDto =
+                new ApiResponseDeveloperDto(
+                        457389L, "Developer"
+                );
 
         apiResponseFullGameDto = new ApiResponseFullGameDto(
                 1L, "Game", "description",
                 "2025-12-12", "link",
                 List.of(apiPlatformWrapper),
                 List.of(apiResponseGenreDto),
+                List.of(apiResponseDeveloperDto),
                 BigDecimal.valueOf(4.75)
         );
 
