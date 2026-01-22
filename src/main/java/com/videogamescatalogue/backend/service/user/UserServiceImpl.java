@@ -2,7 +2,10 @@ package com.videogamescatalogue.backend.service.user;
 
 import com.videogamescatalogue.backend.dto.internal.user.ChangePasswordRequestDto;
 import com.videogamescatalogue.backend.dto.internal.user.UpdateUserRequestDto;
+import com.videogamescatalogue.backend.dto.internal.user.UserLoginRequestDto;
+import com.videogamescatalogue.backend.dto.internal.user.UserLoginResponseDto;
 import com.videogamescatalogue.backend.dto.internal.user.UserRegistrationRequestDto;
+import com.videogamescatalogue.backend.dto.internal.user.UserRegistrationResponseDto;
 import com.videogamescatalogue.backend.dto.internal.user.UserResponseDto;
 import com.videogamescatalogue.backend.exception.AuthenticationRequiredException;
 import com.videogamescatalogue.backend.exception.EntityNotFoundException;
@@ -13,7 +16,9 @@ import com.videogamescatalogue.backend.model.Role;
 import com.videogamescatalogue.backend.model.User;
 import com.videogamescatalogue.backend.repository.RoleRepository;
 import com.videogamescatalogue.backend.repository.UserRepository;
+import com.videogamescatalogue.backend.security.AuthenticationService;
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +32,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final AuthenticationService authenticationService;
     private Role roleUser;
 
     @PostConstruct
@@ -37,8 +43,9 @@ public class UserServiceImpl implements UserService {
                 );
     }
 
+    @Transactional
     @Override
-    public UserResponseDto registerUser(UserRegistrationRequestDto requestDto) {
+    public UserRegistrationResponseDto registerUser(UserRegistrationRequestDto requestDto) {
         checkUserAlreadyExistsByEmail(requestDto.email());
         checkProfileNameAlreadyExists(requestDto.profileName());
 
@@ -50,7 +57,12 @@ public class UserServiceImpl implements UserService {
 
         log.info("User registered successfully, id={}",savedUser.getId());
 
-        return userMapper.toDto(savedUser);
+        UserLoginResponseDto authResponseDto = authenticationService.authenticate(
+                new UserLoginRequestDto(
+                        requestDto.email(), requestDto.password()
+                ));
+
+        return userMapper.toRegistrationResponseDto(savedUser, authResponseDto.token());
     }
 
     @Override

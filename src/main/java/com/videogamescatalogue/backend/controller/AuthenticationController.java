@@ -3,6 +3,7 @@ package com.videogamescatalogue.backend.controller;
 import com.videogamescatalogue.backend.dto.internal.user.UserLoginRequestDto;
 import com.videogamescatalogue.backend.dto.internal.user.UserLoginResponseDto;
 import com.videogamescatalogue.backend.dto.internal.user.UserRegistrationRequestDto;
+import com.videogamescatalogue.backend.dto.internal.user.UserRegistrationResponseDto;
 import com.videogamescatalogue.backend.dto.internal.user.UserResponseDto;
 import com.videogamescatalogue.backend.security.AuthenticationService;
 import com.videogamescatalogue.backend.service.user.UserService;
@@ -45,7 +46,7 @@ public class AuthenticationController {
             }
     )
     @PostMapping("/registration")
-    UserResponseDto registerUser(
+    UserRegistrationResponseDto registerUser(
             @RequestBody @Valid UserRegistrationRequestDto requestDto
     ) {
         return userService.registerUser(requestDto);
