@@ -49,7 +49,10 @@ public interface GameMapper {
     GameDto toDto(Game game);
 
     @Mapping(target = "status", source = "status")
-    @Mapping(source = "developers", target = "developers", qualifiedByName = "toDeveloperDtosSet")
+    @Mapping(
+            source = "game.developers", target = "developers",
+            qualifiedByName = "toDeveloperDtosSet"
+    )
     GameWithStatusDto toDtoWithStatus(Game game, UserGame.GameStatus status);
 
     @Named("toYear")

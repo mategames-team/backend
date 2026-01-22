@@ -1,6 +1,5 @@
 package com.videogamescatalogue.backend.service.game;
 
-import com.videogamescatalogue.backend.dto.external.ApiResponseDeveloperDto;
 import com.videogamescatalogue.backend.dto.external.ApiResponseFullGameDto;
 import com.videogamescatalogue.backend.dto.external.ApiResponseGameDto;
 import com.videogamescatalogue.backend.dto.internal.GameSearchParameters;
@@ -12,10 +11,12 @@ import com.videogamescatalogue.backend.model.Developer;
 import com.videogamescatalogue.backend.model.Game;
 import com.videogamescatalogue.backend.model.User;
 import com.videogamescatalogue.backend.model.UserGame;
+import com.videogamescatalogue.backend.repository.DeveloperRepository;
 import com.videogamescatalogue.backend.repository.GameRepository;
 import com.videogamescatalogue.backend.repository.SpecificationBuilder;
 import com.videogamescatalogue.backend.repository.UserGameRepository;
 import com.videogamescatalogue.backend.service.RawgApiClient;
+import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,7 @@ public class GameServiceImpl implements GameService {
     private final GameRepository gameRepository;
     private final SpecificationBuilder<Game, GameSearchParameters> specificationBuilder;
     private final UserGameRepository userGameRepository;
+    private final DeveloperRepository developerRepository;
 
     @Override
     public void fetchBestGames() {
@@ -87,6 +89,7 @@ public class GameServiceImpl implements GameService {
                 .map(gameMapper::toDto);
     }
 
+    @Transactional
     @Override
     public GameWithStatusDto getByApiId(Long apiId, User user) {
         Game game = findOrUpdate(apiId);
@@ -176,6 +179,7 @@ public class GameServiceImpl implements GameService {
     private void updateGameDevelopers(Long apiId, Game game) {
         ApiResponseFullGameDto apiGame = apiClient.getGameById(apiId);
         Set<Developer> developers = developerMapper.toModelSet(apiGame.developers());
+        developerRepository.saveAll(developers);
         game.setDevelopers(developers);
         gameRepository.save(game);
     }
