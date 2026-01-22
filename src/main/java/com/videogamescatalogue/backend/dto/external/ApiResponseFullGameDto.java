@@ -15,6 +15,8 @@ public record ApiResponseFullGameDto(
 
         List<ApiResponseGenreDto> genres,
 
+        List<ApiResponseDeveloperDto> developers,
+
         BigDecimal rating
 ) {
 }

@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import com.videogamescatalogue.backend.dto.internal.developer.DeveloperDto;
 import com.videogamescatalogue.backend.dto.internal.game.GameDto;
 import com.videogamescatalogue.backend.dto.internal.genre.GenreDto;
 import com.videogamescatalogue.backend.dto.internal.platform.PlatformDto;
@@ -45,9 +46,10 @@ class UserGameServiceImplTest {
     private User user;
     private UserGame userGame;
     private UserGameDto userGameDto;
-    private GameDto gameDto;
     private PlatformDto platformDto;
     private GenreDto genreDto;
+    private DeveloperDto developerDto;
+    private GameDto gameDto;
 
     @BeforeEach
     void setUp() {
@@ -79,11 +81,16 @@ class UserGameServiceImplTest {
 
         genreDto = new GenreDto("Action");
 
+        developerDto = new DeveloperDto(
+                30L, 23456L, "Developer"
+        );
+
         gameDto = new GameDto(
                1234L, "Game name",
                 2016, "link",
                 Set.of(platformDto),
                 Set.of(genreDto),
+                Set.of(developerDto),
                 BigDecimal.valueOf(4.8),
                 "description"
         );

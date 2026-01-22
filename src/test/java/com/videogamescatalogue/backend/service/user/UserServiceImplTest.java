@@ -11,7 +11,10 @@ import static org.mockito.Mockito.when;
 
 import com.videogamescatalogue.backend.dto.internal.user.ChangePasswordRequestDto;
 import com.videogamescatalogue.backend.dto.internal.user.UpdateUserRequestDto;
+import com.videogamescatalogue.backend.dto.internal.user.UserLoginRequestDto;
+import com.videogamescatalogue.backend.dto.internal.user.UserLoginResponseDto;
 import com.videogamescatalogue.backend.dto.internal.user.UserRegistrationRequestDto;
+import com.videogamescatalogue.backend.dto.internal.user.UserRegistrationResponseDto;
 import com.videogamescatalogue.backend.dto.internal.user.UserResponseDto;
 import com.videogamescatalogue.backend.dto.internal.usergame.UserGameStatusDto;
 import com.videogamescatalogue.backend.exception.AuthenticationRequiredException;
@@ -21,6 +24,7 @@ import com.videogamescatalogue.backend.mapper.user.UserMapper;
 import com.videogamescatalogue.backend.model.Role;
 import com.videogamescatalogue.backend.model.User;
 import com.videogamescatalogue.backend.repository.UserRepository;
+import com.videogamescatalogue.backend.security.AuthenticationService;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,6 +43,8 @@ class UserServiceImplTest {
     private UserMapper userMapper;
     @Mock
     private PasswordEncoder passwordEncoder;
+    @Mock
+    private AuthenticationService authenticationService;
     @InjectMocks
     private UserServiceImpl userService;
     private String email = "test@gmail.com";
@@ -100,7 +106,7 @@ class UserServiceImplTest {
 
         updateUserRequestDto = new UpdateUserRequestDto(
                 "updated profileName", null,
-                null, null
+                null
         );
 
         changePasswordRequestDto = new ChangePasswordRequestDto(
@@ -128,6 +134,11 @@ class UserServiceImplTest {
 
     @Test
     void registerUser_validRequest_returnUserDto() {
+        final UserRegistrationResponseDto responseDto = new UserRegistrationResponseDto(
+                1L, "profileName", "about",
+                "location", "token"
+        );
+
         String encodedPassword = user.getPassword();
 
         when(userRepository.existsByEmail(email))
@@ -139,13 +150,17 @@ class UserServiceImplTest {
                 .thenReturn(encodedPassword);
         when(userRepository.save(user))
                 .thenReturn(user);
-        when(userMapper.toDto(user)).thenReturn(responseDtoBob);
+        when(authenticationService.authenticate(new UserLoginRequestDto(
+                registrationRequestDto.email(), registrationRequestDto.password()
+        ))).thenReturn(new UserLoginResponseDto("token", 10L));
+        when(userMapper.toRegistrationResponseDto(user, "token"))
+                .thenReturn(responseDto);
 
-        UserResponseDto actual = userService.registerUser(
+        UserRegistrationResponseDto actual = userService.registerUser(
                 registrationRequestDto
         );
 
-        assertEquals(responseDtoBob, actual);
+        assertEquals(responseDto, actual);
 
         verify(passwordEncoder).encode(registrationRequestDto.password());
         verify(userRepository).existsByEmail(email);

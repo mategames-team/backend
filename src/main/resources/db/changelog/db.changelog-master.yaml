@@ -29,3 +29,7 @@ databaseChangeLog:
       file: classpath:/db/changelog/changes/14-create-user-game-table.yaml
   - include:
       file: classpath:/db/changelog/changes/15-create-comments-table.yaml
+  - include:
+      file: classpath:/db/changelog/changes/16-create-developers-table.yaml
+  - include:
+      file: classpath:/db/changelog/changes/17-create-games-developers-table.yaml

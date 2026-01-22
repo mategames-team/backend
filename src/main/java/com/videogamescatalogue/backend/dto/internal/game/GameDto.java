@@ -1,5 +1,6 @@
 package com.videogamescatalogue.backend.dto.internal.game;
 
+import com.videogamescatalogue.backend.dto.internal.developer.DeveloperDto;
 import com.videogamescatalogue.backend.dto.internal.genre.GenreDto;
 import com.videogamescatalogue.backend.dto.internal.platform.PlatformDto;
 import java.math.BigDecimal;
@@ -12,6 +13,7 @@ public record GameDto(
         String backgroundImage,
         Set<PlatformDto> platforms,
         Set<GenreDto> genres,
+        Set<DeveloperDto> developers,
         BigDecimal apiRating,
         String description
 ) {
