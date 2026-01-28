@@ -41,13 +41,6 @@ public class JwtUtil {
         }
     }
 
-    private Jws<Claims> getAllClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(secret)
-                .build()
-                .parseClaimsJws(token);
-    }
-
     public String getUsername(String token) {
         return getSpecificClaim(token, Claims::getSubject);
     }
@@ -55,5 +48,12 @@ public class JwtUtil {
     private <T> T getSpecificClaim(String token, Function<Claims, T> claimsResolver) {
         Jws<Claims> allClaims = getAllClaims(token);
         return claimsResolver.apply(allClaims.getBody());
+    }
+
+    private Jws<Claims> getAllClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(secret)
+                .build()
+                .parseClaimsJws(token);
     }
 }
