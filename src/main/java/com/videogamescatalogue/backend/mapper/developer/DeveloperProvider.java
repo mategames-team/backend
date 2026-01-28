@@ -6,7 +6,6 @@ import com.videogamescatalogue.backend.model.Developer;
 import com.videogamescatalogue.backend.repository.DeveloperRepository;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;

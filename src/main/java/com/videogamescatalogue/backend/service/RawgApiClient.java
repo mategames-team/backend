@@ -45,9 +45,9 @@ public class RawgApiClient {
     private static final String DATES_BETWEEN_URL_PART = "&dates=" + LocalDate.now()
             + "%2C" + LocalDate.now().minusMonths(12);
     private static final String METACRITIC_URL_PART = "metacritic=80%2C100";
-    public static final int NUMBER_OF_DOWNLOAD_PORTIONS = 11;
-    public static final String REQUEST_HEADER_NAME = "User-Agent";
-    public static final String REQUEST_HEADER_VALUE = "VideoGamesCatalogue";
+    private static final int NUMBER_OF_DOWNLOAD_PORTIONS = 11;
+    private static final String REQUEST_HEADER_NAME = "User-Agent";
+    private static final String REQUEST_HEADER_VALUE = "VideoGamesCatalogue";
 
     @Value("${rawg.key}")
     private String apiKey;

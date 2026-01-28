@@ -164,8 +164,8 @@ public class GameServiceImpl implements GameService {
     private Game findOrUpdate(Long apiId) {
         Optional<Game> gameOptional = gameRepository.findByApiId(apiId);
         if (gameOptional.isPresent()
-        && gameOptional.get().getDescription() != null
-        && !gameOptional.get().getDevelopers().isEmpty()) {
+                && gameOptional.get().getDescription() != null
+                && !gameOptional.get().getDevelopers().isEmpty()) {
             return gameOptional.get();
         }
         ApiResponseFullGameDto apiGame = apiClient.getGameById(apiId);
