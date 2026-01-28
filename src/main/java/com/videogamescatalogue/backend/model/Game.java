@@ -13,6 +13,7 @@ import jakarta.persistence.UniqueConstraint;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
@@ -39,6 +40,7 @@ public class Game {
 
     private String backgroundImage;
 
+    @EqualsAndHashCode.Exclude
     @ManyToMany
     @JoinTable(
             name = "games_platforms",
@@ -48,6 +50,7 @@ public class Game {
     )
     private Set<Platform> platforms = new HashSet<>();
 
+    @EqualsAndHashCode.Exclude
     @ManyToMany
     @JoinTable(
             name = "games_genres",
@@ -57,6 +60,7 @@ public class Game {
     )
     private Set<Genre> genres = new HashSet<>();
 
+    @EqualsAndHashCode.Exclude
     @ManyToMany
     @JoinTable(
             name = "games_developers",
