@@ -6,9 +6,12 @@ import com.videogamescatalogue.backend.dto.internal.GameSearchParameters;
 import com.videogamescatalogue.backend.dto.internal.game.GameDto;
 import com.videogamescatalogue.backend.dto.internal.game.GameWithStatusDto;
 import com.videogamescatalogue.backend.mapper.developer.DeveloperMapper;
+import com.videogamescatalogue.backend.mapper.developer.DeveloperProvider;
 import com.videogamescatalogue.backend.mapper.game.GameMapper;
 import com.videogamescatalogue.backend.model.Developer;
 import com.videogamescatalogue.backend.model.Game;
+import com.videogamescatalogue.backend.model.Genre;
+import com.videogamescatalogue.backend.model.Platform;
 import com.videogamescatalogue.backend.model.User;
 import com.videogamescatalogue.backend.model.UserGame;
 import com.videogamescatalogue.backend.repository.DeveloperRepository;
@@ -18,6 +21,7 @@ import com.videogamescatalogue.backend.repository.UserGameRepository;
 import com.videogamescatalogue.backend.service.RawgApiClient;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -42,6 +46,7 @@ public class GameServiceImpl implements GameService {
     private final SpecificationBuilder<Game, GameSearchParameters> specificationBuilder;
     private final UserGameRepository userGameRepository;
     private final DeveloperRepository developerRepository;
+    private final DeveloperProvider developerProvider;
 
     @Override
     public void fetchBestGames() {
@@ -108,6 +113,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public Page<GameDto> search(GameSearchParameters searchParameters, Pageable pageable) {
+        validateSearchParams(searchParameters);
         Specification<Game> specification = specificationBuilder.build(searchParameters);
 
         return gameRepository.findAll(specification, pageable)
@@ -157,35 +163,56 @@ public class GameServiceImpl implements GameService {
 
     private Game findOrUpdate(Long apiId) {
         Optional<Game> gameOptional = gameRepository.findByApiId(apiId);
+        if (gameOptional.isPresent()
+        && gameOptional.get().getDescription() != null
+        && !gameOptional.get().getDevelopers().isEmpty()) {
+            return gameOptional.get();
+        }
+        ApiResponseFullGameDto apiGame = apiClient.getGameById(apiId);
         if (gameOptional.isEmpty()) {
-            return findFromApi(apiId);
+            return gameMapper.toModel(apiGame);
         }
         Game game = gameOptional.get();
-        if (game.getDescription() == null) {
-            updateGameDescription(apiId, game);
-        }
-        if (game.getDevelopers().isEmpty()) {
-            updateGameDevelopers(apiId, game);
-        }
+        updateGameInfo(game, apiGame);
         return game;
     }
 
-    private void updateGameDescription(Long apiId, Game game) {
-        ApiResponseFullGameDto apiGame = apiClient.getGameById(apiId);
-        game.setDescription(apiGame.description());
+    private void updateGameInfo(Game game, ApiResponseFullGameDto apiGame) {
+        if (game.getDescription() == null) {
+            game.setDescription(apiGame.description());
+        }
+        if (game.getDevelopers().isEmpty()) {
+            Set<Developer> developersSet = developerProvider.toDevelopersSet(apiGame.developers());
+            developerRepository.saveAll(developersSet);
+            game.setDevelopers(developersSet);
+        }
         gameRepository.save(game);
     }
 
-    private void updateGameDevelopers(Long apiId, Game game) {
-        ApiResponseFullGameDto apiGame = apiClient.getGameById(apiId);
-        Set<Developer> developers = developerMapper.toModelSet(apiGame.developers());
-        developerRepository.saveAll(developers);
-        game.setDevelopers(developers);
-        gameRepository.save(game);
-    }
-
-    private Game findFromApi(Long apiId) {
-        ApiResponseFullGameDto apiGame = apiClient.getGameById(apiId);
-        return gameMapper.toModel(apiGame);
+    private void validateSearchParams(GameSearchParameters searchParameters) {
+        if (searchParameters.platforms() != null) {
+            try {
+                searchParameters.platforms()
+                        .forEach(
+                                p -> Platform.GeneralName.valueOf(p.toUpperCase())
+                        );
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException(
+                        "Invalid platforms provided. Valid platforms: "
+                                + Arrays.stream(Platform.GeneralName.values())
+                                .map(Enum::toString)
+                                .collect(Collectors.joining(", ")), e);
+            }
+        }
+        if (searchParameters.genres() != null) {
+            try {
+                searchParameters.genres().forEach(g -> Genre.Name.valueOf(g.toUpperCase()));
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Invalid genres provided. Valid genres: "
+                        + Arrays.stream(Genre.Name.values())
+                        .map(Enum::toString)
+                        .collect(Collectors.joining(", ")), e);
+            }
+        }
     }
 }

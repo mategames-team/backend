@@ -130,7 +130,6 @@ public class GameController {
             @PageableDefault(size = DEFAULT_PAGE_SIZE)
             Pageable pageable
     ) {
-        validateSearchParams(searchParameters);
         return gameService.search(searchParameters, pageable);
     }
 
@@ -148,32 +147,5 @@ public class GameController {
             @RequestParam Map<String, String> searchParams
     ) {
         return gameService.apiSearch(searchParams);
-    }
-
-    private void validateSearchParams(GameSearchParameters searchParameters) {
-        if (searchParameters.platforms() != null) {
-            try {
-                searchParameters.platforms()
-                        .forEach(
-                                p -> Platform.GeneralName.valueOf(p.toUpperCase())
-                        );
-            } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException(
-                        "Invalid platforms provided. Valid platforms: "
-                        + Arrays.stream(Platform.GeneralName.values())
-                                .map(Enum::toString)
-                                .collect(Collectors.joining(", ")), e);
-            }
-        }
-        if (searchParameters.genres() != null) {
-            try {
-                searchParameters.genres().forEach(g -> Genre.Name.valueOf(g.toUpperCase()));
-            } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("Invalid genres provided. Valid genres: "
-                + Arrays.stream(Genre.Name.values())
-                        .map(Enum::toString)
-                        .collect(Collectors.joining(", ")), e);
-            }
-        }
     }
 }

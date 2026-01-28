@@ -7,6 +7,7 @@ import com.videogamescatalogue.backend.dto.internal.user.UserLoginResponseDto;
 import com.videogamescatalogue.backend.dto.internal.user.UserRegistrationRequestDto;
 import com.videogamescatalogue.backend.dto.internal.user.UserRegistrationResponseDto;
 import com.videogamescatalogue.backend.dto.internal.user.UserResponseDto;
+import com.videogamescatalogue.backend.exception.AccessNotAllowedException;
 import com.videogamescatalogue.backend.exception.AuthenticationRequiredException;
 import com.videogamescatalogue.backend.exception.EntityNotFoundException;
 import com.videogamescatalogue.backend.exception.InvalidInputException;
@@ -78,6 +79,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto updateUserInfo(UpdateUserRequestDto requestDto, User authenticatedUser) {
+        if (authenticatedUser == null) {
+            throw new AccessNotAllowedException(
+                    "You are not allowed to modify this user info. Please log in."
+            );
+        }
+        if (requestDto.profileName() != null) {
+            checkProfileNameAlreadyExists(requestDto.profileName());
+        }
         User updatedUser = userMapper.updateProfileInfo(authenticatedUser, requestDto);
         User savedUser = userRepository.save(updatedUser);
 
@@ -90,6 +99,11 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto changePassword(
             ChangePasswordRequestDto requestDto, User authenticatedUser
     ) {
+        if (authenticatedUser == null) {
+            throw new AccessNotAllowedException(
+                    "You are not allowed to modify this user info. Please log in."
+            );
+        }
         validateCurrentPassword(requestDto, authenticatedUser);
         checkPasswordsMatch(requestDto);
 
@@ -127,8 +141,8 @@ public class UserServiceImpl implements UserService {
 
     private void checkProfileNameAlreadyExists(String profileName) {
         if (userRepository.existsByProfileNameIgnoreCase(profileName)) {
-            throw new RegistrationException("Can't register user with profileName "
-                    + profileName + ". This profileName is already in use.");
+            throw new RegistrationException("Profile Name "
+                    + profileName + " is already in use.");
         }
     }
 

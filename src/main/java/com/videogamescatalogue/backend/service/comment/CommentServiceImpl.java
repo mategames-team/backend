@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -31,6 +32,7 @@ public class CommentServiceImpl implements CommentService {
     private final GameMapper gameMapper;
     private final CommentRepository commentRepository;
 
+    @Transactional
     @Override
     public CommentDto create(Long gameApiId, CreateCommentRequestDto requestDto, User user) {
         Comment comment = commentMapper.toModel(requestDto);
@@ -61,11 +63,6 @@ public class CommentServiceImpl implements CommentService {
         return findCommentsByUserId(userId, pageable);
     }
 
-    private Page<CommentDto> findCommentsByUserId(Long userId, Pageable pageable) {
-        Page<Comment> userComments = commentRepository.findAllByUserId(userId, pageable);
-        return userComments.map(commentMapper::toDto);
-    }
-
     @Override
     public CommentDto update(Long commentId, UpdateCommentRequestDto requestDto, Long userId) {
         Comment comment = commentRepository.findById(commentId)
@@ -92,6 +89,11 @@ public class CommentServiceImpl implements CommentService {
     public void delete(Long commentId, Long userId) {
         existsByIdAndUserId(commentId, userId);
         commentRepository.deleteById(commentId);
+    }
+
+    private Page<CommentDto> findCommentsByUserId(Long userId, Pageable pageable) {
+        Page<Comment> userComments = commentRepository.findAllByUserId(userId, pageable);
+        return userComments.map(commentMapper::toDto);
     }
 
     private void existsByIdAndUserId(Long commentId, Long userId) {
