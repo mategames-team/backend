@@ -33,3 +33,5 @@ databaseChangeLog:
       file: classpath:/db/changelog/changes/16-create-developers-table.yaml
   - include:
       file: classpath:/db/changelog/changes/17-create-games-developers-table.yaml
+  - include:
+      file: classpath:/db/changelog/changes/18-alter-games-description-to-text.yaml
