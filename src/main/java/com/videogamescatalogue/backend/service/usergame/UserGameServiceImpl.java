@@ -7,13 +7,16 @@ import com.videogamescatalogue.backend.exception.AuthenticationRequiredException
 import com.videogamescatalogue.backend.exception.EntityNotFoundException;
 import com.videogamescatalogue.backend.mapper.game.GameMapper;
 import com.videogamescatalogue.backend.mapper.usergame.UserGameMapper;
+import com.videogamescatalogue.backend.model.Developer;
 import com.videogamescatalogue.backend.model.Game;
 import com.videogamescatalogue.backend.model.User;
 import com.videogamescatalogue.backend.model.UserGame;
+import com.videogamescatalogue.backend.repository.DeveloperRepository;
 import com.videogamescatalogue.backend.repository.GameRepository;
 import com.videogamescatalogue.backend.repository.UserGameRepository;
 import com.videogamescatalogue.backend.service.RawgApiClient;
 import java.util.Optional;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +30,7 @@ public class UserGameServiceImpl implements UserGameService {
     private final RawgApiClient apiClient;
     private final UserGameMapper userGameMapper;
     private final GameMapper gameMapper;
+    private final DeveloperRepository developerRepository;
 
     @Override
     public UserGameDto createOrUpdate(CreateUserGameDto createDto, User user) {
@@ -115,6 +119,9 @@ public class UserGameServiceImpl implements UserGameService {
 
     private Game getGameFromApi(Long apiId) {
         ApiResponseFullGameDto apiGame = apiClient.getGameById(apiId);
-        return gameMapper.toModel(apiGame);
+        Game game = gameMapper.toModel(apiGame);
+        Set<Developer> developers = game.getDevelopers();
+        developerRepository.saveAll(developers);
+        return game;
     }
 }

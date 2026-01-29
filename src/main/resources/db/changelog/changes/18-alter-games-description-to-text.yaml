@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: alter-games-description-to-text
+      author: julia
+      changes:
+        - modifyDataType:
+            tableName: games
+            columnName: description
+            newDataType: TEXT
